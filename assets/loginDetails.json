@@ -1,0 +1,49 @@
+[
+    {
+      "Roll_no": "CB.EN.U4CSE18028",
+      "First Name": "Kishore",
+      "Last Name": "Saravanan",
+      "User Name": "Kishore91",
+      "Password":"admin",
+      "Department": "CSE",
+      "E-mail": "kishoresaravanan91@gmail.com",
+      "Wallet id":"123456789",
+      "Year of Study":"2"
+    },
+    {
+      "Roll_no": "CB.EN.U4CSE18069",
+      "First Name": "Dheeraj",
+      "Last Name": "Varghese",
+      "User Name": "Dheeraj06",
+      "Password":"admin",
+      "Department": "CSE",
+      "E-mail": "dheerajvarghese@gmail.com",
+      "Wallet id":"123789456",
+      "Year of Study":"2"
+
+    },
+    {
+      "Roll_no": "CB.EN.U4CSE18066",
+      "First Name": "Tej",
+      "Last Name": "Deep",
+      "User Name": "Tejo25",
+      "Password":"admin",
+      "Department": "CSE",
+      "E-mail": "thatigotlatejdeep@gmail.com",
+      "Wallet id":"987654321",
+      "Year of Study":"2"
+
+    },
+    {
+      "Roll_no": "admin",
+      "First Name": "Suraj",
+      "Last Name": "Warrier",
+      "User Name": "Suraj07",
+      "Password":"admin",
+      "Department": "CSE",
+      "E-mail": "suraj.s.warrier@gmail.com",
+      "Wallet id":"456123789",
+      "Year of Study":"2"
+
+    }
+]

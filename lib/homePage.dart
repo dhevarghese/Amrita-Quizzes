@@ -1,3 +1,4 @@
+import 'package:amrita_quizzes/SignupPage.dart';
 import 'package:flutter/material.dart';
 
 class ScreenArguments {
@@ -32,6 +33,26 @@ class HomePage extends StatelessWidget {
         style: TextStyle(fontSize: 28.0, color: Colors.white),
       ),
     );
+
+    //kish temp work space
+    final loginButton = Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (BuildContext context) => SignUpPage()),
+          );
+        },
+        padding: EdgeInsets.all(12),
+        color: Colors.lightBlueAccent,
+        child: Text('Log In', style: TextStyle(color: Colors.white)),
+      ),
+    );
+    //temp work space end
 
     final lorem = Padding(
       padding: EdgeInsets.all(8.0),

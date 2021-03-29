@@ -1,3 +1,4 @@
+import 'package:amrita_quizzes/SignupPage.dart';
 import 'package:flutter/material.dart';
 import 'homePage.dart';
 import 'dart:convert';
@@ -82,6 +83,39 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
+    //kish work area start (adding signup button)
+    final signupButton = RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (BuildContext context) => SignUpPage()),
+          );
+        },
+        padding: EdgeInsets.all(12),
+        color: Colors.lightBlueAccent,
+        child: Text('Sign up', style: TextStyle(color: Colors.white)),
+      );
+    //);
+
+
+    final signupLabel = FlatButton(
+      child: Text(
+        'Dont have an account? Sign Up!',
+        style: TextStyle(color: Colors.black54),
+      ),
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (BuildContext context) => SignUpPage()),
+        );
+      },
+    );
+
+    //kish work area end (adding signup button)
+
     final forgotLabel = FlatButton(
       child: Text(
         'Forgot password?',
@@ -112,7 +146,9 @@ class _LoginPageState extends State<LoginPage> {
             password,
             SizedBox(height: 24.0),
             loginButton,
-            forgotLabel
+            signupButton,
+            forgotLabel,
+            signupLabel
           ],
         ),
       ),

@@ -1,7 +1,6 @@
-import 'package:amrita_quizzes/SignupPage.dart';
+import 'package:amrita_quizzes/homePage.dart';
+import 'package:amrita_quizzes/loginPage.dart';
 import 'package:flutter/material.dart';
-import 'loginPage.dart';
-import 'homePage.dart';
 
 void main() {
   runApp(MyApp());

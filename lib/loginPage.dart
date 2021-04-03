@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:amrita_quizzes/SignupPage.dart';
 import 'package:flutter/material.dart';
+
 import 'homePage.dart';
-import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
@@ -85,19 +87,19 @@ class _LoginPageState extends State<LoginPage> {
 
     //kish work area start (adding signup button)
     final signupButton = RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (BuildContext context) => SignUpPage()),
-          );
-        },
-        padding: EdgeInsets.all(12),
-        color: Colors.lightBlueAccent,
-        child: Text('Sign up', style: TextStyle(color: Colors.white)),
-      );
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+      ),
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (BuildContext context) => SignUpPage()),
+        );
+      },
+      padding: EdgeInsets.all(12),
+      color: Colors.lightBlueAccent,
+      child: Text('Sign up', style: TextStyle(color: Colors.white)),
+    );
     //);
 
 
@@ -136,8 +138,8 @@ class _LoginPageState extends State<LoginPage> {
             Text('Amrita Quizzes',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 28.0,
-                    color: Colors.lightBlueAccent,
+                  fontSize: 28.0,
+                  color: Colors.lightBlueAccent,
                 )
             ),
             SizedBox(height: 48.0),

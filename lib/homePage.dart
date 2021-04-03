@@ -1,5 +1,6 @@
-import 'package:amrita_quizzes/SignupPage.dart';
 import 'package:flutter/material.dart';
+
+import 'SignupPage.dart';
 
 class ScreenArguments {
   final String userName;
@@ -13,7 +14,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    //final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     final alucard = Hero(
       tag: 'hero',
       child: Padding(
@@ -29,7 +30,7 @@ class HomePage extends StatelessWidget {
     final welcome = Padding(
       padding: EdgeInsets.all(8.0),
       child: Text(
-        'Welcome '+args.userName,
+        'Welcome '+"yo",
         style: TextStyle(fontSize: 28.0, color: Colors.white),
       ),
     );

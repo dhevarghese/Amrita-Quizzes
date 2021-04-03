@@ -35,8 +35,8 @@ class SignUpPage extends StatelessWidget {
         //backgroundColor: Theme.of(context).accentColor,
         backgroundColor: Colors.white,
         leading: InkWell(
-          onTap: () => Navigator.of(context).pop(),
-          //child: Image.asset('assets/logo.png'),
+            onTap: () => Navigator.of(context).pop(),
+            //child: Image.asset('assets/logo.png'),
             child: Icon(
               Icons.arrow_back,
               color: Theme.of(context).accentColor,
@@ -84,8 +84,8 @@ class SignUpPage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 28.0),
                     child: Text(
-                      'Create Account',
-                      style: TextStyle(color: Colors.white)
+                        'Create Account',
+                        style: TextStyle(color: Colors.white)
 
                     ),
                   ),

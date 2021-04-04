@@ -35,8 +35,7 @@ class _BodyState extends State<Body> {
         var tempimage = test[i]["image"];
         var tempcolor = Color(int.parse(test[i]["colorcode"]));
         //var tempdescription = test[i]["description"];
-        var tempdescription ="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since. When an unknown printer took a galley.";
-;
+        var tempdescription ="This quiz will assess your knowledge on the topics covered in the first four weeks of the semester. Marks will be taken into account for continuous assessment.";
         var tempfaculty = test[i]["faculty"];
         var tempmarks = test[i]["marks"];
         var tempduration = test[i]["duration"];

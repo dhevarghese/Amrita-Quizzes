@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>341157996604-12bl9uhcsp0s44nppkreagvf6jnsuml9.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.341157996604-12bl9uhcsp0s44nppkreagvf6jnsuml9</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>341157996604-4hs9p3tj8aeak53tca8trh8omc98e1dh.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCyz0snl4BBL6WIVPJMkgkvLIL-5_jY6A0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>341157996604</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dheeraj.amritaQuizzes</string>
+	<key>PROJECT_ID</key>
+	<string>amrita-quizzes-391f0</string>
+	<key>STORAGE_BUCKET</key>
+	<string>amrita-quizzes-391f0.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:341157996604:ios:d20bb9f2a3e645df6dfb39</string>
+</dict>
+</plist>

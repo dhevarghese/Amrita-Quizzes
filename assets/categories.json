@@ -1,0 +1,25 @@
+
+{
+  "Categories": [
+    {
+      "id": "1",
+      "name": "CSE",
+      "description": "Description 1"
+    },
+    {
+      "id": "2",
+      "name": "ECE",
+      "description": "Description 2"
+    },
+    {
+      "id": "3",
+      "name": "EEE",
+      "description": "Description 2"
+    },
+    {
+      "id": "4",
+      "name": "Anokha",
+      "description": "Description 3"
+    }
+  ]
+}

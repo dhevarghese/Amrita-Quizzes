@@ -36,9 +36,16 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.1
+  flutter_svg: ^0.20.0-nullsafety.3
+  get: ^3.24.0 #bruh might not work
+
+  qr_code_scanner:
+    git:
+      url: git://github.com/juliuscanute/qr_code_scanner.git
+      ref: master
 
 dev_dependencies:
-  flutter_launcher_icons: "^0.8.0"
+  #flutter_launcher_icons: "^0.8.0"
   flutter_test:
     sdk: flutter
   #integration_test:
@@ -68,6 +75,10 @@ flutter:
     - assets/login_av2.png
     - assets/login_av3.png
     - assets/loginDetails.json
+    - assets/images/
+    - assets/icons/
+    - assets/categories.json
+    - assets/QuizInfo.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -4,7 +4,6 @@ import 'package:amrita_quizzes/common_widgets/form_submit_button.dart';
 
 void main() {
   testWidgets('onPressed callback', (WidgetTester tester) async {
-    String text = 'Submit';
     var pressed = false;
     await tester.pumpWidget(
       MaterialApp(home: FormSubmitButton(

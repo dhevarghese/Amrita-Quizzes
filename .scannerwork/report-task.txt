@@ -1,0 +1,6 @@
+projectKey=quiz_app
+serverUrl=http://localhost:9000
+serverVersion=8.8.0.42792
+dashboardUrl=http://localhost:9000/dashboard?id=quiz_app
+ceTaskId=AXigP93f-caZ07EJMChE
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXigP93f-caZ07EJMChE

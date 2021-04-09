@@ -63,25 +63,25 @@ void main() {
   group('sign-in', () {
     testWidgets(
         'WHEN user doesn\'t enter the email and password'
-        'AND user taps on the sign-in button'
-        'THEN signInWithEmailAndPassword is not called',
-        (WidgetTester tester) async {
-      var signedIn = false;
-      await pumpEmailSignInForm(tester, onSignedIn: () => signedIn = true);
+            'AND user taps on the sign-in button'
+            'THEN signInWithEmailAndPassword is not called',
+            (WidgetTester tester) async {
+          var signedIn = false;
+          await pumpEmailSignInForm(tester, onSignedIn: () => signedIn = true);
 
-      final primaryButton = find.byKey(Key('primary-button'));
-      expect(primaryButton, findsOneWidget);
-      await tester.tap(primaryButton);
+          final primaryButton = find.byKey(Key('primary-button'));
+          expect(primaryButton, findsOneWidget);
+          await tester.tap(primaryButton);
 
-      verifyNever(mockAuth.signInWithEmailAndPassword(any, any));
-      expect(signedIn, false);
-    });
+          verifyNever(mockAuth.signInWithEmailAndPassword(any, any));
+          expect(signedIn, false);
+        });
 
     testWidgets(
         'WHEN user enters valid email and password'
-        'AND user taps on the sign-in button'
-        'THEN signInWithEmailAndPassword is called'
-        'AND user is signed in', (WidgetTester tester) async {
+            'AND user taps on the sign-in button'
+            'THEN signInWithEmailAndPassword is called'
+            'AND user is signed in', (WidgetTester tester) async {
       const email = 'email@email.com';
       const password = 'password';
 
@@ -111,9 +111,9 @@ void main() {
 
     testWidgets(
         'WHEN user enters invalid email and password'
-        'AND user taps on the sign-in button'
-        'THEN signInWithEmailAndPassword is called'
-        'AND user is not signed in', (WidgetTester tester) async {
+            'AND user taps on the sign-in button'
+            'THEN signInWithEmailAndPassword is called'
+            'AND user is not signed in', (WidgetTester tester) async {
       const email = 'email@email.com';
       const password = 'password';
 
@@ -145,7 +145,7 @@ void main() {
   group('register', () {
     testWidgets(
         'WHEN user taps on the `need account` button'
-        'THEN form toggles to registration mode', (WidgetTester tester) async {
+            'THEN form toggles to registration mode', (WidgetTester tester) async {
       var signedIn = false;
       await pumpEmailSignInForm(tester, onSignedIn: () => signedIn = true);
 
@@ -163,10 +163,10 @@ void main() {
 
     testWidgets(
         'WHEN user taps on the `need account` button'
-        'AND user enters valid email and password'
-        'AND user taps on the register button'
-        'THEN createUserWithEmailAndPassword is called'
-        'AND user is signed in', (WidgetTester tester) async {
+            'AND user enters valid email and password'
+            'AND user taps on the register button'
+            'THEN createUserWithEmailAndPassword is called'
+            'AND user is signed in', (WidgetTester tester) async {
       const email = 'email@email.com';
       const password = 'password';
 
@@ -200,10 +200,10 @@ void main() {
 
     testWidgets(
         'WHEN user taps on the `need account` button'
-        'AND user enters invalid email and password'
-        'AND user taps on the register button'
-        'THEN createUserWithEmailAndPassword is called'
-        'AND user is not signed in', (WidgetTester tester) async {
+            'AND user enters invalid email and password'
+            'AND user taps on the register button'
+            'THEN createUserWithEmailAndPassword is called'
+            'AND user is not signed in', (WidgetTester tester) async {
       const email = 'email@email.com';
       const password = 'password';
 
@@ -239,30 +239,30 @@ void main() {
   group('forgot password', () {
     testWidgets(
         'WHEN user taps on the forgot password button'
-        'THEN form toggles to forgot password mode',
-        (WidgetTester tester) async {
-      var signedIn = false;
-      await pumpEmailSignInForm(tester, onSignedIn: () => signedIn = true);
+            'THEN form toggles to forgot password mode',
+            (WidgetTester tester) async {
+          var signedIn = false;
+          await pumpEmailSignInForm(tester, onSignedIn: () => signedIn = true);
 
-      final secondaryButton = find.byKey(Key('tertiary-button'));
-      await tester.tap(secondaryButton);
+          final secondaryButton = find.byKey(Key('tertiary-button'));
+          await tester.tap(secondaryButton);
 
-      await tester.pump();
+          await tester.pump();
 
-      final sendResetPasswordButton = find.text(Strings.sendResetLink);
-      expect(sendResetPasswordButton, findsOneWidget);
+          final sendResetPasswordButton = find.text(Strings.sendResetLink);
+          expect(sendResetPasswordButton, findsOneWidget);
 
-      verifyNever(mockAuth.sendPasswordResetEmail(any));
-      expect(signedIn, false);
-    });
+          verifyNever(mockAuth.sendPasswordResetEmail(any));
+          expect(signedIn, false);
+        });
   });
 
   testWidgets(
       'WHEN user taps on the forgot password button'
-      'AND user enters an email'
-      'AND user taps on the send reset password link'
-      'THEN sendPasswordResetEmail is called'
-      'AND user is not signed in', (WidgetTester tester) async {
+          'AND user enters an email'
+          'AND user taps on the send reset password link'
+          'THEN sendPasswordResetEmail is called'
+          'AND user is not signed in', (WidgetTester tester) async {
     const email = 'email@email.com';
 
     stubSendPasswordResetEmailSucceeds();

@@ -1,12 +1,10 @@
 import 'dart:async';
-
 import 'package:amrita_quizzes/app/sign_in/sign_in_page.dart';
 import 'package:amrita_quizzes/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-
 import 'mocks.dart';
 
 void main() {

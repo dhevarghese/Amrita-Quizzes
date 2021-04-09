@@ -34,8 +34,8 @@ void main() {
   Future<void> pumpAuthWidget(
       WidgetTester tester,
       {@required
-          Widget Function(BuildContext, AsyncSnapshot<MyAppUser>)
-              builder}) async {
+      Widget Function(BuildContext, AsyncSnapshot<MyAppUser>)
+      builder}) async {
     await tester.pumpWidget(
       Provider<AuthService>(
         create: (_) => mockAuthService,
@@ -47,8 +47,8 @@ void main() {
 
   testWidgets(
       'WHEN onAuthStateChanged in waiting state'
-      'THEN calls builder with snapshot in waiting state'
-      'AND doesn\'t find MultiProvider', (WidgetTester tester) async {
+          'THEN calls builder with snapshot in waiting state'
+          'AND doesn\'t find MultiProvider', (WidgetTester tester) async {
     stubOnAuthStateChangedYields(<MyAppUser>[]);
 
     final snapshots = <AsyncSnapshot<MyAppUser>>[];
@@ -64,8 +64,8 @@ void main() {
 
   testWidgets(
       'WHEN onAuthStateChanged returns null user'
-      'THEN calls builder with null user and active state'
-      'AND doesn\'t find MultiProvider', (WidgetTester tester) async {
+          'THEN calls builder with null user and active state'
+          'AND doesn\'t find MultiProvider', (WidgetTester tester) async {
     stubOnAuthStateChangedYields(<MyAppUser>[null]);
 
     final snapshots = <AsyncSnapshot<MyAppUser>>[];
@@ -82,8 +82,8 @@ void main() {
 
   testWidgets(
       'WHEN onAuthStateChanged returns valid user'
-      'THEN calls builder with same user and active state'
-      'AND finds MultiProvider', (WidgetTester tester) async {
+          'THEN calls builder with same user and active state'
+          'AND finds MultiProvider', (WidgetTester tester) async {
     final user = MyAppUser(uid: '123');
     stubOnAuthStateChangedYields(<MyAppUser>[user]);
 

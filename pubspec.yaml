@@ -46,11 +46,14 @@ dependencies:
 
 dev_dependencies:
   #flutter_launcher_icons: "^0.8.0"
+  flutter_driver:
+    sdk: flutter
   flutter_test:
     sdk: flutter
   #integration_test:
     #sdk: flutter
   mockito: ^4.1.1
+  test:
 
 
 flutter_icons:

@@ -13,7 +13,7 @@ void main() {
   StreamController<MyAppUser> onAuthStateChangedController;
 
   setUp(() {
-    myApp = MyAppUser();
+    myApp = MyAppUser(uid: '');
     mockNavigatorObserver = MockNavigatorObserver();
     onAuthStateChangedController = StreamController<MyAppUser>();
   });
@@ -43,6 +43,7 @@ void main() {
 
   testWidgets('Sign Out Button Test', (WidgetTester tester) async {
     await pumpHomePage(tester);
+    // ignore: deprecated_member_use
     final SignOutButton = find.byType(FlatButton);
     expect(SignOutButton, findsOneWidget);
     await tester.tap(SignOutButton);

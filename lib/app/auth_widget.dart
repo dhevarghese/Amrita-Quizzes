@@ -1,8 +1,7 @@
-import 'package:amrita_quizzes/app/home_page.dart';
 import 'package:amrita_quizzes/app/sign_in/sign_in_page.dart';
+import 'package:amrita_quizzes/screens/home/home_screen.dart';
 import 'package:amrita_quizzes/services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:amrita_quizzes/screens/home/home_screen.dart';
 
 /// Builds the signed-in or non signed-in UI, depending on the user snapshot.
 /// This widget should be below the [MaterialApp].
@@ -15,7 +14,6 @@ class AuthWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (userSnapshot.connectionState == ConnectionState.active) {
-      //return userSnapshot.hasData ? HomePage() : SignInPageBuilder();
       return userSnapshot.hasData ? HomeScreen() : SignInPageBuilder();
     }
     return Scaffold(

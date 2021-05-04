@@ -1,4 +1,5 @@
 import 'package:amrita_quizzes/services/auth_service.dart';
+import 'package:amrita_quizzes/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,10 +18,12 @@ class AuthWidgetBuilder extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<MyAppUser> snapshot) {
         final MyAppUser user = snapshot.data;
         if (user != null) {
+          final DatabaseService dbs = DatabaseService(uid: user.uid);
           return MultiProvider(
             providers: [
               Provider<MyAppUser>.value(value: user),
               // NOTE: Any other user-bound providers here can be added here
+              Provider<Database>.value(value: dbs)
             ],
             child: builder(context, snapshot),
           );

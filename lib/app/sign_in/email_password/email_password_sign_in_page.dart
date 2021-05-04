@@ -167,7 +167,7 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
             onPressed: model.isLoading ? null : _submit,
           ),
           SizedBox(height: 8.0),
-          FlatButton(
+          TextButton(
             key: Key('secondary-button'),
             child: Text(model.secondaryButtonText),
             onPressed: model.isLoading
@@ -175,7 +175,7 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
                 : () => _updateFormType(model.secondaryActionFormType),
           ),
           if (model.formType == EmailPasswordSignInFormType.signIn)
-            FlatButton(
+            TextButton(
               key: Key('tertiary-button'),
               child: Text(Strings.forgotPasswordQuestion),
               onPressed: model.isLoading
@@ -192,6 +192,9 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: Colors.white
+        ),
         backgroundColor: Colors.lightBlueAccent,
         elevation: 2.0,
         title: Text(model.title,

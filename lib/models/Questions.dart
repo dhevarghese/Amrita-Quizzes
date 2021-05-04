@@ -4,6 +4,19 @@ class Question {
   final List<String> options;
 
   Question({this.id, this.question, this.answer, this.options});
+
+  Map<String, dynamic> toJson() =>
+      {
+        'id': id,
+        'question':question,
+        'answer': answer,
+        'options':options,
+      };
+
+  @override
+  String toString(){
+    return this.id.toString() +" "+ this.question +" "+ this.options.toString()+" "+ this.answer.toString();
+  }
 }
 
 const List sample_data = [

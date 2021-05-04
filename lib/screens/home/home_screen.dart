@@ -1,21 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:amrita_quizzes/constants/color_constants.dart';
-import 'package:amrita_quizzes/screens/home/components/body.dart';
-import 'package:amrita_quizzes/screens/home/components/qr.dart';
-//import 'package:amrita_quizzes/app/home_page.dart';
-
 //import 'package:amrita_quizzes/common_widgets/avatar.dart';
 import 'package:amrita_quizzes/common_widgets/platform_alert_dialog.dart';
 import 'package:amrita_quizzes/common_widgets/platform_exception_alert_dialog.dart';
+import 'package:amrita_quizzes/constants/color_constants.dart';
 //import 'package:amrita_quizzes/constants/keys.dart';
 import 'package:amrita_quizzes/constants/strings.dart';
+import 'package:amrita_quizzes/screens/addquiz/add_quiz_screen.dart';
+import 'package:amrita_quizzes/screens/home/components/body.dart';
+import 'package:amrita_quizzes/screens/home/components/qr.dart';
 import 'package:amrita_quizzes/services/auth_service.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
-
 
   Future<void> _signOut(BuildContext context) async {
     try {
@@ -47,6 +45,18 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: buildAppBar(context),
       body: Body(),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.lightBlueAccent,
+        elevation: 4.0,
+        onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddQuizScreen(),
+            )
+        ),
+      ),
     );
   }
 

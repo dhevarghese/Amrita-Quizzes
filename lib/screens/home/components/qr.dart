@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-
 import 'dart:io';
+
+import 'package:amrita_quizzes/models/Quiz_info.dart';
+import 'package:amrita_quizzes/screens/details/details_screen.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 // /*
 class QRViewExample extends StatefulWidget {
   @override
@@ -88,6 +90,23 @@ class _QRViewExampleState extends State<QRViewExample> {
                         margin: EdgeInsets.all(8),
                         child: ElevatedButton(
                           onPressed: () async {
+                            int temp = 0;
+                            for (int i = 0; i < products.length; i++) {
+                              if (products[i].id == result.code) {
+                                temp = i;
+                              }
+                            }
+                            print(temp);
+                            //start temp
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailsScreen(
+                                    quiz_info: products[temp],
+                                  ),
+                                ));
+                            //end temp
+
                             await controller?.pauseCamera();
                           },
                           child: Text('pause', style: TextStyle(fontSize: 20)),

@@ -54,7 +54,7 @@
       "faculty": "Dr.Kannan",
       "marks": 20,
       "duration": "1 hour",
-      "category": "CSE"
+      "category": "ECE"
     },
     {
       "id": "5",
@@ -82,7 +82,7 @@
       "faculty": "Dr.Kannan",
       "marks": 20,
       "duration": "1 hour",
-      "category": "CSE"
+      "category": "ECE"
     }
   ]
 }

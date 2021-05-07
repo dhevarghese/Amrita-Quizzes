@@ -1,14 +1,16 @@
-import 'package:flutter/material.dart';
-
-import 'package:amrita_quizzes/constants/color_constants.dart';
-
 import 'dart:convert';
 
+import 'package:amrita_quizzes/constants/color_constants.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // We need satefull widget for our categories
 
 class Categories extends StatefulWidget {
+  String SelectedCategory;
+  Function(String) callback;
+
+  Categories(this.SelectedCategory, this.callback);
   @override
   _CategoriesState createState() => _CategoriesState();
 }
@@ -58,6 +60,7 @@ class _CategoriesState extends State<Categories> {
       onTap: () {
         setState(() {
           selectedIndex = index;
+          widget.callback(categories[index]["name"]);
           //print(selectedIndex);
         });
       },

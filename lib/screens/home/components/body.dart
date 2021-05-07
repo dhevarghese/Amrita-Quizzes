@@ -20,6 +20,8 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   List test = [];
+  String SelectedCategory = "CSE";
+  int selectedIndex = 0;
 
 
   Future<void> readJsonProducttemp() async {
@@ -28,6 +30,9 @@ class _BodyState extends State<Body> {
     //_items = data["Categories"];
     setState(() {
       test = data["QuizInfo"];
+      products.clear();
+      productstest.clear();
+
       //print(test);
       for (int i = 0; i < test.length; i++) {
         var tempid = int.parse(test[i]["id"]);
@@ -53,13 +58,31 @@ class _BodyState extends State<Body> {
             faculty: tempfaculty,
             marks: tempmarks,
             duration: tempduration);
-        productstest.add(temp_quiz_info);
-        products.add(temp_quiz_info);// comment this later, used for test
 
-        print(temp_quiz_info.image);
+        if(test[i]["category"] == SelectedCategory) {
+          productstest.add(temp_quiz_info);
+          products.add(temp_quiz_info);
+          print(temp_quiz_info.image);
+          print(SelectedCategory);
+        }
+        //productstest.add(temp_quiz_info);
+
+        //products.add(temp_quiz_info);// comment this later, used for test
+
+        //print(temp_quiz_info.image);
+        //print(SelectedCategory);
+
     }
     });
   }
+
+  callback(newSelectedCategory) {
+    setState(() {
+      SelectedCategory = newSelectedCategory;
+      readJsonProducttemp();
+    });
+  }
+
 
   @override
   void initState() {
@@ -143,7 +166,7 @@ class _BodyState extends State<Body> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: kDefaultPaddin),
           child: Text(
-            "Quizzes",
+            "$SelectedCategory Quizzes ",
             style: Theme.of(context)
                 .textTheme
                 .headline5
@@ -151,7 +174,7 @@ class _BodyState extends State<Body> {
           ),
         ),
 
-        Categories(),
+        Categories(SelectedCategory, callback),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: kDefaultPaddin),

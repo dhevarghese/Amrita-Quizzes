@@ -196,7 +196,7 @@ class AddQuizScreen extends StatelessWidget {
                     print(formData);
                     dbs.getUserName().then((value){
                       String hexString = formData['qColor'].substring(formData['qColor'].indexOf('x')+1,formData['qColor'].length-1);
-                      final newQuiz = Quiz(title: formData['qName'], description: formData['qDesc'], password: formData['qPass'], creator: value, category: formData['qCategory'], startTime: formData['qStartDate'], endTime: formData['qEndDate'], duration: formData['qDuration'], numQuestions: formData['numQ'], marks: int.parse(formData['qMarks']), id: numQuizzes, color: hexString, image: formData['qImage'][0]);
+                      final newQuiz = Quiz(title: formData['qName'], description: formData['qDesc'], password: formData['qPass'], creator: value, category: formData['qCategory'], startTime: formData['qStartDate'], endTime: formData['qEndDate'], duration: formData['qDuration'], numQuestions: formData['numQ'], marks: int.parse(formData['qMarks']), id: numQuizzes.toString(), color: hexString, image: formData['qImage'][0]);
                       print(newQuiz.toString());
                       Navigator.push(
                           context,

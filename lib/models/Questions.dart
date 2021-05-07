@@ -1,7 +1,7 @@
 class Question {
   final int id, answer;
   final String question;
-  final List<String> options;
+  final List options;
 
   Question({this.id, this.question, this.answer, this.options});
 
@@ -12,6 +12,12 @@ class Question {
         'answer': answer,
         'options':options,
       };
+
+  Question.fromJson(Map parsedJson) :
+        options = parsedJson['options'] ?? '',
+        question = parsedJson['question'] ?? '',
+        answer = parsedJson['answer'],
+        id = parsedJson['id'];
 
   @override
   String toString(){

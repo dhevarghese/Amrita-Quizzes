@@ -1,3 +1,4 @@
+import 'package:amrita_quizzes/models/Questions.dart';
 import 'package:amrita_quizzes/models/Quiz.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -7,6 +8,7 @@ abstract class Database {
   Future<String> getUserName();
   Future<void> addQuiz(Quiz q, String uid);
   Future<int> numberOfQuizzes();
+  Future<List<Quiz>> getQuizzes();
 }
 
 class DatabaseService implements Database {
@@ -35,6 +37,45 @@ class DatabaseService implements Database {
 
   Future<int> numberOfQuizzes() async {
     return quizCollection.snapshots().length;
+  }
+
+  Future<List<Quiz>> getQuizzes() async{
+    List quizzesToTake = [];
+    List<Quiz> qList = [];
+    await userCollection.doc(uid).get().then((DocumentSnapshot ds) {
+      quizzesToTake = ds.get("quizzes_to_take");
+      /*quizCollection.get().then((value){
+        for(var i in value.docs){
+          var quizData = i.data();
+          print(quizData['title']);
+          quizData['startTime'] = quizData['startTime'].toDate();
+          quizData['endTime'] = quizData['endTime'].toDate();
+          quizData['numQuestions'] = quizData['numQuestions'].toDouble();
+          Quiz _quiz = Quiz.fromJson(quizData);
+          print(_quiz.toString());
+        }
+      });*/
+    }).catchError((e){});
+    for (var quiz in quizzesToTake) {
+      await quizCollection.doc(quiz).get().then((DocumentSnapshot qt) async {
+
+        var quizData = qt.data();
+        print(quizData['title']);
+        quizData['startTime'] = quizData['startTime'].toDate();
+        quizData['endTime'] = quizData['endTime'].toDate();
+        quizData['numQuestions'] = quizData['numQuestions'].toDouble();
+        Quiz _quiz = Quiz.fromJson(quizData);
+
+        await quizCollection.doc(quiz).collection("Questions").get().then((questions) {
+          for(var question in questions.docs){
+            Question _question = Question.fromJson(question.data());
+            _quiz.addQuestions(_question);
+          }
+        });
+        qList.add(_quiz);
+      }).catchError((e) {});
+    }
+    return qList;
   }
 
   Future<void> addQuiz(Quiz q, String uid) async {

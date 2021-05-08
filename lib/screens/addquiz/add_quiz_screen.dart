@@ -14,6 +14,21 @@ class AddQuizScreen extends StatelessWidget {
 
   final _formKey = GlobalKey<FormBuilderState>();
 
+  Widget _textField(BuildContext context, String id, String label, String hint, int mLines, bool obscure, TextInputType keyboardType, IconData fIcon){
+    return FormBuilderTextField(name: id,
+      keyboardType: keyboardType,
+      obscureText: obscure,
+      maxLines: mLines,
+      decoration: InputDecoration(
+        icon: Icon(fIcon, color: Colors.lightBlueAccent,),
+        labelText: label,
+        hintText: hint,
+        //border: OutlineInputBorder(),
+      ),
+      validator: FormBuilderValidators.required(context),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final dbs = Provider.of<Database>(context);
@@ -52,43 +67,11 @@ class AddQuizScreen extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
                 child: Column(
                   children: [
-                    FormBuilderTextField(name: 'qName',
-                        decoration: InputDecoration(
-                          labelText: 'Quiz name',
-                          hintText: 'ML Quiz',
-                          //border: OutlineInputBorder(),
-                        ),
-                        validator: FormBuilderValidators.required(context),
-                    ),
-                    FormBuilderTextField(name: 'qDesc',
-                        maxLines: 4,
-                        decoration: InputDecoration(
-                          labelText: 'Description',
-                          hintText: 'This quiz will assess your knowledge on the topics covered in the first four weeks of the semester. Marks will be taken into account for continuous assessment.',
-                          //border: OutlineInputBorder(),
-                        ),
-                        validator: FormBuilderValidators.required(context),
-                    ),
-                    FormBuilderTextField(name: 'qPass',
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                        ),
-                      validator: FormBuilderValidators.required(context),
-                    ),
-                    FormBuilderTextField(name: 'qMarks',
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: 'Marks',
-                      ),
-                      validator: FormBuilderValidators.required(context),
-                    ),
-                    FormBuilderTextField(name: 'qCategory',
-                      decoration: InputDecoration(
-                        labelText: 'Category',
-                      ),
-                      validator: FormBuilderValidators.required(context),
-                    ),
+                    _textField(context, 'qName', 'Quiz name', 'ML Quiz', 1, false, TextInputType.text, Icons.auto_stories), //assistant_photo
+                    _textField(context, 'qDesc', 'Description', 'This quiz will assess your knowledge on the topics covered in the first four weeks of the semester. Marks will be taken into account for continuous assessment.', 4, false, TextInputType.text, Icons.assignment),
+                    _textField(context, 'qPass', 'Password', '', 1, true, TextInputType.text, Icons.shield),
+                    _textField(context, 'qMarks', 'Marks', '20', 1, false, TextInputType.number, Icons.bar_chart),
+                    _textField(context, 'qCategory', 'Category', 'CSE', 1, false, TextInputType.text, Icons.category),
                     FormBuilderSlider(name: 'numQ',
                       min: 0.0,
                       max: 10.0,
@@ -97,6 +80,7 @@ class AddQuizScreen extends StatelessWidget {
                       activeColor: Colors.blue,
                       inactiveColor: Colors.lightBlueAccent,
                       decoration: InputDecoration(
+                        //icon: Icon(Icons.question_answer, color: Colors.lightBlueAccent,),
                         labelText: 'Number of Questions',
                         border: InputBorder.none,
                       ),
@@ -128,6 +112,7 @@ class AddQuizScreen extends StatelessWidget {
                     FormBuilderDateTimePicker(
                       name: 'qStartDate',
                       decoration: InputDecoration(
+                        icon: Icon(Icons.date_range_outlined, color: Colors.lightBlueAccent,),
                         labelText: 'Start time',
                       ),
                       validator: FormBuilderValidators.required(context),
@@ -135,18 +120,12 @@ class AddQuizScreen extends StatelessWidget {
                     FormBuilderDateTimePicker(
                         name: 'qEndDate',
                         decoration: InputDecoration(
+                          icon: Icon(Icons.date_range_sharp, color: Colors.lightBlueAccent,),
                           labelText: 'End time',
                         ),
                       validator: FormBuilderValidators.required(context),
                     ),
-                    FormBuilderTextField(name: 'qDuration',
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: 'Duration',
-                          hintText: 'In Minutes',
-                        ),
-                      validator: FormBuilderValidators.required(context),
-                    ),
+                    _textField(context, 'qDuration', 'Duration', 'In Minutes', 1, false, TextInputType.number, Icons.timelapse),
                   ],
                 ),
               ),
@@ -169,7 +148,9 @@ class AddQuizScreen extends StatelessWidget {
                   children: [
                     FormBuilderColorPickerField(  name: 'qColor',
                       colorPickerType: ColorPickerType.MaterialPicker,
-                      decoration: InputDecoration(labelText: 'Pick Color'),
+                      decoration: InputDecoration(
+                          icon: Icon(Icons.color_lens, color: Colors.lightBlueAccent,),
+                          labelText: 'Pick Color'),
                       validator: FormBuilderValidators.required(context),
                       valueTransformer: (value) {
                        return value.toString();
@@ -178,7 +159,7 @@ class AddQuizScreen extends StatelessWidget {
                     SizedBox(height: 10,),
                     FormBuilderImagePicker(
                       name: 'qImage',
-                      decoration: const InputDecoration(labelText: 'Image', border: InputBorder.none),
+                      decoration: const InputDecoration(labelText: 'Image', border: InputBorder.none, icon: Icon(Icons.image, color: Colors.lightBlueAccent,),),
                       maxImages: 1,
                       validator: FormBuilderValidators.required(context),
                     ),

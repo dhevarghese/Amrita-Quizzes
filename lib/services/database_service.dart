@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 abstract class Database {
-  Future<void> updateUserData(String name);
+  Future<void> updateUserData(String name, String dept, String section);
   Future<String> getUserName();
   Future<void> addQuiz(Quiz q, String uid);
   Future<int> numberOfQuizzes();
@@ -20,9 +20,11 @@ class DatabaseService implements Database {
   final CollectionReference quizCollection = FirebaseFirestore.instance.collection('quizzes');
   final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
 
-  Future<void> updateUserData(String name) async {
+  Future<void> updateUserData(String name, String dept, String section) async {
     return await userCollection.doc(uid).set({
       'name': name,
+      'department': dept,
+      'section':section,
     });
   }
 

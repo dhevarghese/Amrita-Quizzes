@@ -1,5 +1,5 @@
 import 'package:amrita_quizzes/app/sign_in/sign_in_page.dart';
-import 'package:amrita_quizzes/screens/home/home_screen.dart';
+import 'package:amrita_quizzes/screens/home/user_info.dart';
 import 'package:amrita_quizzes/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +14,8 @@ class AuthWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (userSnapshot.connectionState == ConnectionState.active) {
-      return userSnapshot.hasData ? HomeScreen() : SignInPageBuilder();
+      //return userSnapshot.hasData ? HomeScreen() : SignInPageBuilder();
+      return userSnapshot.hasData ? UserInfo() : SignInPageBuilder();
     }
     return Scaffold(
       body: Center(

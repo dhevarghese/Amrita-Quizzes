@@ -3,11 +3,8 @@ import 'dart:convert';
 import 'package:amrita_quizzes/constants/color_constants.dart';
 import 'package:amrita_quizzes/models/Quiz_info.dart';
 import 'package:amrita_quizzes/screens/details/details_screen.dart';
-import 'package:amrita_quizzes/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:provider/provider.dart';
 
 import 'categorries.dart';
 import 'quiz_card.dart';
@@ -90,73 +87,9 @@ class _BodyState extends State<Body> {
     readJsonProducttemp();
   }
 
-  Widget getUName(Database dbs){
-    final _formKey = GlobalKey<FormBuilderState>();
-    return Container(
-      color: Colors.white,
-      padding: new EdgeInsets.all(50),
-      child: Column(
-        children: [
-          Text(
-            'Identify yourself!',
-            style: Theme.of(context).textTheme.headline5,
-          ),
-          FormBuilder(
-            key: _formKey,
-            child: FormBuilderTextField(name: 'uName',
-              decoration: InputDecoration(
-                labelText: 'Your name',
-                hintText: 'Ron',
-              ),
-              validator: FormBuilderValidators.required(context),
-            ),
-          ),
-          TextButton(
-            child: new Text("OK"),
-            onPressed: () {
-              final validationSuccess = _formKey.currentState.validate();
-              if(validationSuccess){
-                _formKey.currentState.save();
-                final formData = _formKey.currentState.value;
-                print(formData);
-                print(_formKey.currentState.value['uName']);
-                dbs.updateUserData(_formKey.currentState.value['uName']);
-                setState(() {});
-              }
-              //Navigator.of(context).pop();
-            },
-          )
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final dbs = Provider.of<Database>(context);
-    return FutureBuilder<String>(
-        future: dbs.getUserName(),
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          print(snapshot.data);
-          if (!snapshot.hasData) {
-            // while data is loading:
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            // data loaded:
-            final uName = snapshot.data;
-            if(uName == ""){
-              /*return Stack(children: [
-                quizDisplay(),
-                getUName(dbs)
-              ],);*/
-              return getUName(dbs);
-            }
-            return quizDisplay();
-          }
-        }
-    );
+    return quizDisplay();
   }
 
   Widget quizDisplay(){

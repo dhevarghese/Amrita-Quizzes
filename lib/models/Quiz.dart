@@ -12,6 +12,7 @@ class Quiz {
   final double numQuestions;
   File image;
   List<Question> questions = [];
+  List<String> takers;
   String imageLink = "";
 
   Quiz({
@@ -28,6 +29,7 @@ class Quiz {
     @required this.id,
     @required this.image,
     @required this.color,
+    this.takers = const [],
   });
 
   void addQuestions(Question question){
@@ -53,6 +55,7 @@ class Quiz {
         'marks': marks,
         'id': id,
         'color': color,
+        'takers':takers
       };
 
   Quiz.fromJson(Map parsedJson) :

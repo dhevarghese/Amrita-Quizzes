@@ -6,12 +6,14 @@ import 'package:meta/meta.dart';
 
 class Quiz {
 
-  final String title, description, password, creator, category, duration, color;
+  final String title, description, password, creator, category, duration, color, id;
   final DateTime startTime, endTime;
-  final int marks, id;
+  final int marks;
   final double numQuestions;
-  final File image;
+  File image;
   List<Question> questions = [];
+  List<String> takers;
+  String imageLink = "";
 
   Quiz({
     @required this.title,
@@ -27,6 +29,7 @@ class Quiz {
     @required this.id,
     @required this.image,
     @required this.color,
+    this.takers = const [],
   });
 
   void addQuestions(Question question){
@@ -52,7 +55,23 @@ class Quiz {
         'marks': marks,
         'id': id,
         'color': color,
+        'takers':takers
       };
+
+  Quiz.fromJson(Map parsedJson) :
+    title = parsedJson['title'] ?? '',
+    description = parsedJson['description'] ?? '',
+    password = parsedJson['password'] ?? '',
+    creator = parsedJson['creator'] ?? '',
+    category = parsedJson['category'] ?? '',
+    startTime = parsedJson['startTime'],
+    endTime = parsedJson['endTime'],
+    duration = parsedJson['duration'],
+    numQuestions = parsedJson['numQuestions'],
+    marks = parsedJson['marks'],
+    id = parsedJson['id'] ?? '', // the doc ID, helpful to have
+    imageLink = parsedJson['image'] ?? '',
+    color = parsedJson['color'] ?? '';
 
   @override
   String toString(){

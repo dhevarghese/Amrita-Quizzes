@@ -1,82 +1,44 @@
-import 'dart:convert';
 
 import 'package:amrita_quizzes/constants/color_constants.dart';
-import 'package:amrita_quizzes/models/Quiz_info.dart';
+import 'package:amrita_quizzes/models/Quiz.dart';
 import 'package:amrita_quizzes/screens/details/details_screen.dart';
+import 'package:amrita_quizzes/services/database_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
-import 'categorries.dart';
+import 'categories.dart';
 import 'quiz_card.dart';
 
 class Body extends StatefulWidget {
-  Body({Key key}) : super(key: key);
+  final List<Quiz> qlist;
+  Body(this.qlist, {Key key}) : super(key: key);
 
   _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-  List test = [];
-  String SelectedCategory = "CSE";
+  List<Quiz> quizzes = [];
+  //Future<List<Quiz>> futureQuiz;
+  String SelectedCategory = "";
   int selectedIndex = 0;
 
 
-  Future<void> readJsonProducttemp() async {
-    final String response = await rootBundle.loadString('assets/QuizInfo.json');
-    final data = await json.decode(response);
-    //_items = data["Categories"];
-    setState(() {
-      test = data["QuizInfo"];
-      products.clear();
-      productstest.clear();
 
-      //print(test);
-      for (int i = 0; i < test.length; i++) {
-        var tempid = int.parse(test[i]["id"]);
-        var temptitle = test[i]["title"];
-        var tempprice = test[i]["price"];
-        var tempsize = test[i]["size"];
-        var tempimage = test[i]["image"];
-        var tempcolor = Color(int.parse(test[i]["colorcode"]));
-        //var tempdescription = test[i]["description"];
-        var tempdescription ="This quiz will assess your knowledge on the topics covered in the first four weeks of the semester. Marks will be taken into account for continuous assessment.";
-        var tempfaculty = test[i]["faculty"];
-        var tempmarks = test[i]["marks"];
-        var tempduration = test[i]["duration"];
-
-        var temp_quiz_info = Quiz_info(
-            id: tempid,
-            title: temptitle,
-            price: tempprice,
-            size: tempsize,
-            image: tempimage,
-            color: tempcolor,
-            description: tempdescription,
-            faculty: tempfaculty,
-            marks: tempmarks,
-            duration: tempduration);
-
-        if(test[i]["category"] == SelectedCategory) {
-          productstest.add(temp_quiz_info);
-          products.add(temp_quiz_info);
-          print(temp_quiz_info.image);
-          print(SelectedCategory);
-        }
-        //productstest.add(temp_quiz_info);
-
-        //products.add(temp_quiz_info);// comment this later, used for test
-
-        //print(temp_quiz_info.image);
-        //print(SelectedCategory);
-
+  List<Quiz> filterQList(String filter)  {
+    List<Quiz> filterq = [];
+    for (var quiz in widget.qlist) {
+      if(quiz.category == filter) {
+        filterq.add(quiz);
+      }
     }
-    });
+    return filterq;
   }
 
   callback(newSelectedCategory) {
     setState(() {
       SelectedCategory = newSelectedCategory;
-      readJsonProducttemp();
+      quizzes =filterQList(SelectedCategory);
+
     });
   }
 
@@ -84,15 +46,57 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     super.initState();
-    readJsonProducttemp();
+    if (widget.qlist.length != 0) {
+      SelectedCategory = widget.qlist[0].category;
+    }
+    quizzes = filterQList(SelectedCategory);
+  }
+
+  GridView _quizGridView(List<Quiz> data) {
+    return GridView.builder(
+        itemCount: data.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: kDefaultPaddin,
+          crossAxisSpacing: kDefaultPaddin,
+          childAspectRatio: 0.75 ,
+        ),
+        itemBuilder: (context, index) => ItemCard(
+          quiz_info: data[index],
+          press: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailsScreen(
+                  quiz_info: data[index],
+                ),
+              )),
+        ));
+
+    /*
+
+     */
   }
 
   @override
   Widget build(BuildContext context) {
-    return quizDisplay();
+    return (widget.qlist.length == 0) ?  noQuizzes() : quizDisplay();
+    //return quizDisplay();
   }
 
+  Widget noQuizzes() {
+    return Container(
+        child: Center(
+            child: Text('No Quizzes To Take at this moment', style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),)
+        )
+    );
+  }
+
+
   Widget quizDisplay(){
+    final dbs = Provider.of<Database>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -107,31 +111,15 @@ class _BodyState extends State<Body> {
           ),
         ),
 
-        Categories(SelectedCategory, callback),
+        Categories(SelectedCategory, callback, widget.qlist),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: kDefaultPaddin),
-            child: GridView.builder(
-                itemCount: products.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: kDefaultPaddin,
-                  crossAxisSpacing: kDefaultPaddin,
-                  childAspectRatio: 0.75 ,
-                ),
-                itemBuilder: (context, index) => ItemCard(
-                  quiz_info: products[index],
-                  press: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailsScreen(
-                          quiz_info: products[index],
-                        ),
-                      )),
-                )),
+            child: _quizGridView(quizzes),
           ),
         ),
       ],
     );
   }
 }
+

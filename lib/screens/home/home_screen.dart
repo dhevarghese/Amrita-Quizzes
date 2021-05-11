@@ -4,10 +4,11 @@ import 'package:amrita_quizzes/common_widgets/platform_exception_alert_dialog.da
 import 'package:amrita_quizzes/constants/color_constants.dart';
 //import 'package:amrita_quizzes/constants/keys.dart';
 import 'package:amrita_quizzes/constants/strings.dart';
+import 'package:amrita_quizzes/models/Quiz.dart';
 import 'package:amrita_quizzes/screens/addquiz/add_quiz_screen.dart';
 import 'package:amrita_quizzes/screens/home/components/body.dart';
-import 'package:amrita_quizzes/screens/home/components/qr.dart';
 import 'package:amrita_quizzes/services/auth_service.dart';
+import 'package:amrita_quizzes/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,11 +41,48 @@ class HomeScreen extends StatelessWidget {
   }
 
 
+  /*
+  FutureBuilder<List<Quiz>> (
+              future: dbs.getQuizzes(),
+              builder: (context, AsyncSnapshot dashBoardsnapshot) {
+                if(!dashBoardsnapshot.hasData){
+                  return Scaffold(
+                    body: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+                else {
+                  return Body(dashBoardsnapshot.data);
+                }
+              }
+              ,
+            ),
+   */
+
   @override
   Widget build(BuildContext context) {
+    final dbs = Provider.of<Database>(context);
+    dbs.getQuizById('xgBjbGsmedoqLycp2NPK');
     return Scaffold(
       appBar: buildAppBar(context),
-      body: Body(),
+      body: FutureBuilder<List<Quiz>> (
+        future: dbs.getQuizzes(),
+        builder: (context, AsyncSnapshot<List<Quiz>> dashBoardsnapshot) {
+          if(!dashBoardsnapshot.hasData){
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+          else {
+            List<Quiz> data = dashBoardsnapshot.data;
+            return Body(data);
+          }
+        }
+        ,
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         foregroundColor: Colors.white,
@@ -96,7 +134,7 @@ class HomeScreen extends StatelessWidget {
           ),
           onPressed: () {},
         ),
-
+/*
         Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -114,7 +152,7 @@ class HomeScreen extends StatelessWidget {
             );
           },
         ),
-
+*/
         //IconButton(
           //icon: SvgPicture.asset(
             //"assets/icons/qr.svg",

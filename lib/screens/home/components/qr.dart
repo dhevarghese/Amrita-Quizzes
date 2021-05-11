@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:amrita_quizzes/models/Quiz_info.dart';
 import 'package:amrita_quizzes/screens/details/details_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ class QRViewExample extends StatefulWidget {
 }
 
 class _QRViewExampleState extends State<QRViewExample> {
+  List products = [];
   Barcode result;
   QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');

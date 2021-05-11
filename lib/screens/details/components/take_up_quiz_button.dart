@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:amrita_quizzes/models/Quiz_info.dart';
-import 'package:amrita_quizzes/screens/home/components/qr.dart';
 // import 'package:shop_app/screens/home/components/qr.dart';
 import 'package:amrita_quizzes/constants/color_constants.dart';
+import 'package:amrita_quizzes/models/Quiz.dart';
 import'package:amrita_quizzes/screens/Quiz/quiz_main.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AddToCart extends StatelessWidget {
   const AddToCart({
@@ -12,7 +11,7 @@ class AddToCart extends StatelessWidget {
     @required this.quiz_info,
   }) : super(key: key);
 
-  final Quiz_info quiz_info;
+  final Quiz quiz_info;
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +26,13 @@ class AddToCart extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
-                color: quiz_info.color,
+                color: Color(int.parse('0x'+quiz_info.color)),
               ),
             ),
             child: IconButton(
               icon: SvgPicture.asset(
                 "assets/icons/qr.svg",
-                color: quiz_info.color,
+                color: Color(int.parse('0x'+quiz_info.color)),
               ),
               onPressed: () {},
             ),
@@ -44,7 +43,7 @@ class AddToCart extends StatelessWidget {
               child: FlatButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18)),
-                color: quiz_info.color,
+                color: Color(int.parse('0x'+quiz_info.color)),
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(

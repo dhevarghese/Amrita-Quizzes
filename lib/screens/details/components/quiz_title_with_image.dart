@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:amrita_quizzes/models/Quiz_info.dart';
-
 import 'package:amrita_quizzes/constants/color_constants.dart';
+import 'package:amrita_quizzes/models/Quiz.dart';
+import 'package:flutter/material.dart';
 
 class ProductTitleWithImage extends StatelessWidget {
   const ProductTitleWithImage({
@@ -9,7 +8,7 @@ class ProductTitleWithImage extends StatelessWidget {
     @required this.quiz_info,
   }) : super(key: key);
 
-  final Quiz_info quiz_info;
+  final Quiz quiz_info;
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +53,8 @@ class ProductTitleWithImage extends StatelessWidget {
               Expanded(
                 child: Hero(
                   tag: "${quiz_info.id}",
-                  child: Image.asset(
-                    quiz_info.image,
-                    fit: BoxFit.fill,
+                  child: Image.network(
+                    quiz_info.imageLink,
                   ),
                 ),
               )

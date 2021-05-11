@@ -11,6 +11,7 @@ abstract class Database {
   Future<List<Quiz>> getQuizzes();
   //Future<Map> getUsers();
   Future<List> getUsers();
+  Future<Quiz> getQuizById(String id);
 }
 
 class DatabaseService implements Database {
@@ -72,6 +73,37 @@ class DatabaseService implements Database {
   Future<int> numberOfQuizzes() async {
     return quizCollection.snapshots().length;
   }
+  
+  Future<Quiz> getQuizById(String id) async {
+    var qs = await quizCollection.where('id', isEqualTo: id).get();
+    print(qs.docs[0].data());
+    Quiz qById;
+    if(qs.docs.length > 0) {
+      var quizData = qs.docs[0].data();
+      quizData['startTime'] = quizData['startTime'].toDate();
+      quizData['endTime'] = quizData['endTime'].toDate();
+      quizData['numQuestions'] = quizData['numQuestions'].toDouble();
+      qById  = Quiz.fromJson(quizData);
+
+      await quizCollection.doc(qs.docs[0].id).collection("Questions").get().then((questions) {
+        for(var question in questions.docs){
+          Question _question = Question.fromJson(question.data());
+          qById.addQuestions(_question);
+        }
+      });
+    }
+    
+    else {
+      //qById = Quiz.fromJson({'starttime': ,'endtime': ,})
+    }
+    for(var q in qs.docs) {
+      print("in getQuizById");
+      print(q.id);
+      print(q.data());
+      //userCollection.doc(db_user.id).update({'quizzes_to_take': FieldValue.arrayUnion([q.title]),});
+
+    }
+  } 
 
   Future<List<Quiz>> getQuizzes() async{
     List quizzesToTake = [];

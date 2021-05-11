@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:amrita_quizzes/models/Quiz_info.dart';
-
 import 'package:amrita_quizzes/constants/color_constants.dart';
+import 'package:amrita_quizzes/models/Quiz.dart';
+import 'package:flutter/material.dart';
 
 class ItemCard extends StatelessWidget {
-  final Quiz_info quiz_info;
+  final Quiz quiz_info;
   final Function press;
   const ItemCard({
     Key key,
@@ -14,6 +13,7 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //print(int.parse(quiz_info.color).toString());
     return GestureDetector(
       onTap: press,
       child: Column(
@@ -27,12 +27,14 @@ class ItemCard extends StatelessWidget {
               // height: 180,
               // width: 160,
               decoration: BoxDecoration(
-                color: quiz_info.color,
+                color: Color(int.parse('0x'+quiz_info.color)),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Hero(
                 tag: "${quiz_info.id}",
-                child: Image.asset(quiz_info.image),
+                child: Image.network(
+                  quiz_info.imageLink,
+                )
               ),
             ),
           ),

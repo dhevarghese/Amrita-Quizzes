@@ -1,15 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:amrita_quizzes/constants/color_constants.dart';
-import 'package:amrita_quizzes/models/Quiz_info.dart';
+//import 'package:amrita_quizzes/models/Quiz_info.dart';
+import 'package:amrita_quizzes/models/Quiz.dart';
+import 'package:flutter/material.dart';
 
-import 'take_up_quiz_button.dart';
 import 'StartTime_and_faculty.dart';
 //import 'counter_with_fav_btn_temp.dart';
 import 'description.dart';
 import 'quiz_title_with_image.dart';
+import 'take_up_quiz_button.dart';
 
 class Body extends StatelessWidget {
-  final Quiz_info quiz_info;
+  final Quiz quiz_info;
 
   const Body({Key key, this.quiz_info}) : super(key: key);
   @override

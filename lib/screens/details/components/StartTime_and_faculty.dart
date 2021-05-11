@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:amrita_quizzes/models/Quiz_info.dart';
-
 import 'package:amrita_quizzes/constants/color_constants.dart';
+import 'package:amrita_quizzes/models/Quiz.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ColorAndSize extends StatelessWidget {
   const ColorAndSize({
@@ -9,7 +9,7 @@ class ColorAndSize extends StatelessWidget {
     @required this.quiz_info,
   }) : super(key: key);
 
-  final Quiz_info quiz_info;
+  final Quiz quiz_info;
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +40,9 @@ class ColorAndSize extends StatelessWidget {
             text: TextSpan(
               style: TextStyle(color: kTextColor),
               children: [
-                TextSpan(text: "Start Time\n"),
+                TextSpan(text: "Creator\n"),
                 TextSpan(
-                  text: quiz_info.price,
+                  text: quiz_info.creator,
                   style: Theme.of(context)
                       .textTheme
                       .headline5
@@ -57,9 +57,18 @@ class ColorAndSize extends StatelessWidget {
             text: TextSpan(
               style: TextStyle(color: kTextColor),
               children: [
-                TextSpan(text: "Faculty\n"),
+                TextSpan(text: "Start Time\n"),
                 TextSpan(
-                  text: quiz_info.faculty,
+                  text:  DateFormat('MM/dd kk:mm').format(quiz_info.startTime),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline5
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(text: "\n"),
+                TextSpan(text: "End Time\n"),
+                TextSpan(
+                  text:  DateFormat('MM/dd kk:mm').format(quiz_info.endTime),
                   style: Theme.of(context)
                       .textTheme
                       .headline5
@@ -69,6 +78,7 @@ class ColorAndSize extends StatelessWidget {
             ),
           ),
         ),
+
       ],
     );
   }

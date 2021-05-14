@@ -73,10 +73,10 @@ class DatabaseService implements Database {
   Future<int> numberOfQuizzes() async {
     return quizCollection.snapshots().length;
   }
-  
+
   Future<Quiz> getQuizById(String id) async {
     var qs = await quizCollection.where('id', isEqualTo: id).get();
-    print(qs.docs[0].data());
+    //print(qs.docs[0].data());
     Quiz qById;
     if(qs.docs.length > 0) {
       var quizData = qs.docs[0].data();
@@ -91,11 +91,14 @@ class DatabaseService implements Database {
           qById.addQuestions(_question);
         }
       });
+      return qById;
     }
-    
+
     else {
-      //qById = Quiz.fromJson({'starttime': ,'endtime': ,})
+      qById = Quiz.fromJson({'starttime': DateTime(2017, 9, 7, 17, 30),'endtime': DateTime(2017, 9, 7, 17, 30),'duration':'' ,'numQuestions':0.0 ,'marks':0 });
+      return qById;
     }
+    /*
     for(var q in qs.docs) {
       print("in getQuizById");
       print(q.id);
@@ -103,7 +106,10 @@ class DatabaseService implements Database {
       //userCollection.doc(db_user.id).update({'quizzes_to_take': FieldValue.arrayUnion([q.title]),});
 
     }
-  } 
+    */
+  }
+
+
 
   Future<List<Quiz>> getQuizzes() async{
     List quizzesToTake = [];

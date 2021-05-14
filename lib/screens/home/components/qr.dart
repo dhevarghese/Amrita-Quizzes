@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:amrita_quizzes/screens/details/details_screen.dart';
+import 'package:amrita_quizzes/services/database_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 // /*
 class QRViewExample extends StatefulWidget {
@@ -11,7 +13,7 @@ class QRViewExample extends StatefulWidget {
 }
 
 class _QRViewExampleState extends State<QRViewExample> {
-  List products = [];
+  //List products = [];
   Barcode result;
   QRViewController controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
@@ -26,7 +28,31 @@ class _QRViewExampleState extends State<QRViewExample> {
     controller.resumeCamera();
   }
 
+
+  Widget _buildPopupDialog(BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Sorry!'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("No quiz found"),
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+
   Widget build(BuildContext context) {
+    final dbs = Provider.of<Database>(context);
     return Scaffold(
       body: Column(
         children: <Widget>[
@@ -90,26 +116,31 @@ class _QRViewExampleState extends State<QRViewExample> {
                         margin: EdgeInsets.all(8),
                         child: ElevatedButton(
                           onPressed: () async {
-                            int temp = 0;
-                            for (int i = 0; i < products.length; i++) {
-                              if (products[i].id == result.code) {
-                                temp = i;
+                            //dbs.getQuizById('xgBjbGsmedoqLycp2NPK'); id for bio fundamentals
+                            dbs.getQuizById(result.code).then((quiz) {
+                              if(quiz.numQuestions!=0) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          DetailsScreen(
+                                            quiz_info: quiz,
+                                          ),
+                                    ));
                               }
-                            }
-                            print(temp);
-                            //start temp
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DetailsScreen(
-                                    quiz_info: products[temp],
-                                  ),
-                                ));
-                            //end temp
+                              else {
+                                print("NO such Quiz with id "+result.code+" found");
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) => _buildPopupDialog(context),
+                                );
+
+                              }
+                            } );
 
                             await controller?.pauseCamera();
                           },
-                          child: Text('pause', style: TextStyle(fontSize: 20)),
+                          child: Text('pause/check', style: TextStyle(fontSize: 20)),
                         ),
                       ),
                       Container(
@@ -176,7 +207,7 @@ class _QRViewExampleState extends State<QRViewExample> {
 
 
 
- /*
+/*
 class QRViewExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

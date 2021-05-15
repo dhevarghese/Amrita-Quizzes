@@ -9,9 +9,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final dbs = Provider.of<Database>(context);
     return FutureBuilder<List<Quiz>> (
-        future: dbs.getQuizzes(),
-        builder: (context, AsyncSnapshot<List<Quiz>> dashBoardsnapshot) {
-          if(!dashBoardsnapshot.hasData){
+        future: dbs.getQuizzes("quizzes_to_take"),
+        builder: (context, AsyncSnapshot<List<Quiz>> dashBoardSnapshot) {
+          if(!dashBoardSnapshot.hasData){
             return Scaffold(
               body: Center(
                 child: CircularProgressIndicator(),
@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
             );
           }
           else {
-            List<Quiz> data = dashBoardsnapshot.data;
+            List<Quiz> data = dashBoardSnapshot.data;
             return Body(data);
           }
         }

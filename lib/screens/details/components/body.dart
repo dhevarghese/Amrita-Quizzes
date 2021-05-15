@@ -3,16 +3,16 @@ import 'package:amrita_quizzes/constants/color_constants.dart';
 import 'package:amrita_quizzes/models/Quiz.dart';
 import 'package:flutter/material.dart';
 
-import 'StartTime_and_faculty.dart';
+import 'creator_and_timings.dart';
 //import 'counter_with_fav_btn_temp.dart';
 import 'description.dart';
 import 'quiz_title_with_image.dart';
 import 'take_up_quiz_button.dart';
 
 class Body extends StatelessWidget {
-  final Quiz quiz_info;
+  final Quiz quizInfo;
 
-  const Body({Key key, this.quiz_info}) : super(key: key);
+  const Body({Key key, this.quizInfo}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // It provide us total height and width
@@ -41,17 +41,15 @@ class Body extends StatelessWidget {
                   ),
                   child: Column(
                     children: <Widget>[
-                      ColorAndSize(quiz_info: quiz_info),
+                      CreatorAndTimings(quizInfo: quizInfo),
                       SizedBox(height: kDefaultPaddin / 2),
-                      Description(quiz_info: quiz_info),
+                      Description(quizInfo: quizInfo),
                       SizedBox(height: kDefaultPaddin / 2),
-                      //CounterWithFavBtn(),
-                      SizedBox(height: kDefaultPaddin / 2),
-                      AddToCart(quiz_info: quiz_info)
+                      TakeUpQuiz(quizInfo: quizInfo)
                     ],
                   ),
                 ),
-                ProductTitleWithImage(quiz_info: quiz_info)
+                QuizTitleWithImage(quizInfo: quizInfo)
               ],
             ),
           )

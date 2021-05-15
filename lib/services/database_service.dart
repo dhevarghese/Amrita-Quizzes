@@ -1,5 +1,6 @@
 import 'package:amrita_quizzes/models/Questions.dart';
 import 'package:amrita_quizzes/models/Quiz.dart';
+import 'package:amrita_quizzes/models/QuizUser.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -8,10 +9,11 @@ abstract class Database {
   Future<String> getUserName();
   Future<void> addQuiz(Quiz q, String uid);
   Future<int> numberOfQuizzes();
-  Future<List<Quiz>> getQuizzes();
+  Future<List<Quiz>> getQuizzes(String category);
   //Future<Map> getUsers();
   Future<List> getUsers();
   Future<Quiz> getQuizById(String id);
+  Future<QuizUser> getUserDetails();
 }
 
 class DatabaseService implements Database {
@@ -24,7 +26,7 @@ class DatabaseService implements Database {
   final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
 
   Future<void> updateUserData(String name, String dept, String section) async {
-    return await userCollection.doc(uid).set({
+    return await userCollection.doc(uid).update({
       'name': name,
       'department': dept,
       'section':section,
@@ -38,6 +40,15 @@ class DatabaseService implements Database {
       uName = ds.get("name");
     }).catchError((e){});
     return uName;
+  }
+
+  Future<QuizUser> getUserDetails() async {
+    QuizUser qUser;
+    await userCollection.doc(uid).get().then((DocumentSnapshot ds) {
+      print(ds.data());
+      qUser = QuizUser.fromJson(ds.data());
+    }).catchError((e){});
+    return qUser;
   }
 
   /*
@@ -61,7 +72,6 @@ class DatabaseService implements Database {
 
   Future<List> getUsers() async{
     List users = [];
-    //print("hello");
     await userCollection.get().then((value){
       for(var i in value.docs){
         users.add(i.data()['name']);
@@ -111,11 +121,11 @@ class DatabaseService implements Database {
 
 
 
-  Future<List<Quiz>> getQuizzes() async{
+  Future<List<Quiz>> getQuizzes(String category) async{
     List quizzesToTake = [];
     List<Quiz> qList = [];
     await userCollection.doc(uid).get().then((DocumentSnapshot ds) {
-      quizzesToTake = ds.get("quizzes_to_take");
+      quizzesToTake = ds.get(category);
       /*quizCollection.get().then((value){
         for(var i in value.docs){
           var quizData = i.data();
@@ -168,7 +178,8 @@ class DatabaseService implements Database {
         userCollection.doc(db_user.id).update({'quizzes_to_take': FieldValue.arrayUnion([q.title]),});
       }
     }
-    Reference storageRef = FirebaseStorage.instance.ref().child('quizDashImages');
+    //Reference storageRef = FirebaseStorage.instance.ref().child('quizDashImages');
+    Reference storageRef = FirebaseStorage.instance.ref().child(q.id);
     UploadTask uploadTask = storageRef.putFile(q.image);
     // Waits till the file is uploaded then stores the download url
     String imageURL="";

@@ -6,7 +6,9 @@ import 'package:amrita_quizzes/models/Quiz.dart';
 import 'package:amrita_quizzes/screens/addquiz/add_quiz_screen.dart';
 import 'package:amrita_quizzes/screens/details/details_screen.dart';
 import 'package:amrita_quizzes/screens/home/components/qr.dart';
+import 'package:amrita_quizzes/screens/profile/profile_screen.dart';
 import 'package:amrita_quizzes/services/auth_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
@@ -30,6 +32,7 @@ class _BodyState extends State<Body> {
   SearchBar searchBar;
   String searchBarText="";
   bool _searching = false;
+  int curPage = 0;
 
   List<Quiz> filterQList(String filter)  {
     List<Quiz> filterQ = [];
@@ -100,13 +103,37 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     //return (widget.qList.length == 0) ?  noQuizzes() : quizDisplay();
-    return (widget.qList.length == 0) ?  noQuizzes() : _buildQuizzes();
+    return _buildQuizzes();
   }
 
   Widget _buildQuizzes(){
+    PageController _myPage = PageController(initialPage: 0);
+    //Icon menuIcon = Icon(Icons.menu, color: (curPage==0)? Colors.lightBlueAccent: Colors.black);
+    //Icon ProfileIcon = Icon(Icons.person, color: (curPage==1)? Colors.lightBlueAccent: Colors.black);
     return Scaffold(
       appBar: searchBar.build(context),
-      body: (quizzes.length==0) ? emptySearch() : quizDisplay(),
+      //body: (quizzes.length==0) ? emptySearch() : quizDisplay(),
+      body: PageView(
+        controller: _myPage,
+        onPageChanged: (pageNum) {
+          print('Page Changes to index $pageNum');
+          curPage = pageNum;
+          if(curPage==1){
+            searchBarText="Profile";
+          }
+          else{
+            searchBarText="";
+          }
+          /*setState(() {
+            curPage = pageNum;
+          });*/
+        },
+        children: [
+          (quizzes.length==0) ? emptySearch() : quizDisplay(),
+          Profile()
+        ],
+        physics: NeverScrollableScrollPhysics(),
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         foregroundColor: Colors.white,
@@ -117,6 +144,31 @@ class _BodyState extends State<Body> {
             MaterialPageRoute(
               builder: (context) => AddQuizScreen(),
             )
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+                onPressed: (){
+                  setState(() {
+                    _myPage.jumpToPage(0);
+                  });
+                },
+                icon: Icon(Icons.menu, color: (curPage==0)? Colors.lightBlueAccent: Colors.black)
+            ),
+            IconButton(
+                onPressed: (){
+                  setState(() {
+                    _myPage.jumpToPage(1);
+                  });
+                },
+                icon: Icon(Icons.person, color: (curPage==1)? Colors.lightBlueAccent: Colors.black)
+            )
+          ],
         ),
       ),
     );
@@ -206,14 +258,15 @@ class _BodyState extends State<Body> {
       backgroundColor: Colors.white,
       elevation: 0,
       leading: IconButton(
-        icon: SvgPicture.asset("assets/icons/back.svg"),
+        icon: Icon(Icons.arrow_back),
         onPressed: () {
           _confirmSignOut(context);
         },
       ),
       title: Text(searchBarText),
       actions: <Widget>[
-        searchBar.getSearchAction(context),
+        if(curPage==0)
+          searchBar.getSearchAction(context),
 
         Builder(
           builder: (BuildContext context) {

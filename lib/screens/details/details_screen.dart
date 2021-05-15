@@ -14,7 +14,7 @@ class DetailsScreen extends StatelessWidget {
       // each product have a color
       backgroundColor: Color(int.parse('0x'+quiz_info.color)),
       appBar: buildAppBar(context),
-      body: Body(quiz_info: quiz_info),
+      body: Body(quizInfo: quiz_info),
     );
   }
 
@@ -30,14 +30,6 @@ class DetailsScreen extends StatelessWidget {
         onPressed: () => Navigator.pop(context),
       ),
       actions: <Widget>[
-        IconButton(
-          icon: SvgPicture.asset("assets/icons/search.svg"),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: SvgPicture.asset("assets/icons/heart.svg"),
-          onPressed: () {},
-        ),
         SizedBox(width: kDefaultPaddin / 2)
       ],
     );

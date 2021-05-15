@@ -25,12 +25,24 @@ class _AddQuizScreenState extends State<AddQuizScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   final FocusScopeNode _node = FocusScopeNode();
   Map<String, Widget> takersField = {};
+  DateTime  start = new DateTime.now();
+  int minutes = 10;
 
   Widget _textField(BuildContext context, String id, String label, String hint, int mLines, bool obscure, TextInputType keyboardType, IconData fIcon){
     return FormBuilderTextField(name: id,
       keyboardType: keyboardType,
       obscureText: obscure,
       maxLines: mLines,
+      onChanged: (val){
+        if(id == "qDuration"){
+          minutes = int.tryParse(val) ?? 10;
+        }
+      },
+      onSubmitted: (val){
+        if(id == "qDuration"){
+          minutes = int.parse(val);
+        }
+      },
       onEditingComplete: () => _node.nextFocus(),
       decoration: InputDecoration(
         icon: Icon(fIcon, color: Colors.lightBlueAccent,),
@@ -91,9 +103,9 @@ class _AddQuizScreenState extends State<AddQuizScreen> {
                       SizedBox(height: 10,),
                       FormBuilderSlider(name: 'numQ',
                         min: 0.0,
-                        max: 10.0,
+                        max: 30.0,
                         initialValue: 7.0,
-                        divisions: 10,
+                        divisions: 30,
                         activeColor: Colors.blue,
                         inactiveColor: Colors.lightBlueAccent,
                         decoration: InputDecoration(
@@ -188,7 +200,16 @@ class _AddQuizScreenState extends State<AddQuizScreen> {
                           icon: Icon(Icons.date_range_outlined, color: Colors.lightBlueAccent,),
                           labelText: 'Start time',
                         ),
-                        validator: FormBuilderValidators.required(context),
+                        validator: (value){
+                          if(value==null){
+                            return "This field cannot be empty.";
+                          }
+                          else if(value.isBefore(DateTime.now())){
+                            return "Start time cannot be in the past.";
+                          }
+                          start = value;
+                          return null;
+                        },
                       ),
                       FormBuilderDateTimePicker(
                           name: 'qEndDate',
@@ -196,7 +217,20 @@ class _AddQuizScreenState extends State<AddQuizScreen> {
                             icon: Icon(Icons.date_range_sharp, color: Colors.lightBlueAccent,),
                             labelText: 'End time',
                           ),
-                        validator: FormBuilderValidators.required(context),
+                        validator: (value){
+                          DateTime temp = start;
+                          if(value==null){
+                            return "This field cannot be empty.";
+                          }
+                          else if(value.isBefore(start)){
+                            return "End time cannot be before start.";
+                          }
+                          else if(value.isBefore(temp.add(Duration(minutes: minutes)))){
+                            return "Please give sufficient time to take up the quiz";
+                          }
+                          start = value;
+                          return null;
+                        },
                       ),
                       _textField(context, 'qDuration', 'Duration', 'In Minutes', 1, false, TextInputType.number, Icons.timelapse),
                     ],
@@ -252,7 +286,7 @@ class _AddQuizScreenState extends State<AddQuizScreen> {
                         String hexString = formData['qColor'].substring(formData['qColor'].indexOf('x')+1,formData['qColor'].length-1);
                         final newQuiz = Quiz(title: formData['qName'], description: formData['qDesc'], password: formData['qPass'], creator: value, category: formData['qCategory'], startTime: formData['qStartDate'], endTime: formData['qEndDate'], duration: formData['qDuration'], numQuestions: formData['numQ'], marks: int.parse(formData['qMarks']), id: numQuizzes.toString(), color: hexString, image: formData['qImage'][0], takers: takersField.keys.toList());
                         print(newQuiz.toString());
-                        _node.dispose();
+                        //_node.dispose();
                         Navigator.push(
                             context,
                             MaterialPageRoute(

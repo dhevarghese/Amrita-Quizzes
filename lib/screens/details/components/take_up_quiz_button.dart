@@ -5,13 +5,13 @@ import'package:amrita_quizzes/screens/Quiz/quiz_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class AddToCart extends StatelessWidget {
-  const AddToCart({
+class TakeUpQuiz extends StatelessWidget {
+  const TakeUpQuiz({
     Key key,
-    @required this.quiz_info,
+    @required this.quizInfo,
   }) : super(key: key);
 
-  final Quiz quiz_info;
+  final Quiz quizInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +26,13 @@ class AddToCart extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
-                color: Color(int.parse('0x'+quiz_info.color)),
+                color: Color(int.parse('0x'+quizInfo.color)),
               ),
             ),
             child: IconButton(
               icon: SvgPicture.asset(
                 "assets/icons/qr.svg",
-                color: Color(int.parse('0x'+quiz_info.color)),
+                color: Color(int.parse('0x'+quizInfo.color)),
               ),
               onPressed: () {},
             ),
@@ -43,7 +43,7 @@ class AddToCart extends StatelessWidget {
               child: FlatButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18)),
-                color: Color(int.parse('0x'+quiz_info.color)),
+                color: Color(int.parse('0x'+quizInfo.color)),
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(

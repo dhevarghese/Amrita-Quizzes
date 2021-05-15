@@ -192,10 +192,18 @@ class _QuestionsState extends State<AddQuestions>{
                         text: "Next Question",
                         onPressed: () {
                           //questionsFormField.add(_question());
-                          curQuestion+=1;
-                          questionsFormField.add(_expand(curQuestion));
-                          questionsFormField.add(SizedBox(height: 20));
-                          setState(() {});
+                          if(curQuestion<=widget.mQuiz.numQuestions){
+                            curQuestion+=1;
+                            questionsFormField.add(_expand(curQuestion));
+                            questionsFormField.add(SizedBox(height: 20));
+                            setState(() {});
+                          }
+                          else{
+                            final snackBar = SnackBar(
+                              content: Text("Oops! That's the limit!"),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          }
                         },
                         textColor: Colors.white,
                         color: Colors.lightBlueAccent,

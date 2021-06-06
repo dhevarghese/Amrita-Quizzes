@@ -1,3 +1,4 @@
+
 // import 'package:shop_app/screens/home/components/qr.dart';
 import 'package:amrita_quizzes/constants/color_constants.dart';
 import 'package:amrita_quizzes/models/Quiz.dart';
@@ -12,7 +13,6 @@ class TakeUpQuiz extends StatelessWidget {
   }) : super(key: key);
 
   final Quiz quizInfo;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -47,7 +47,7 @@ class TakeUpQuiz extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (BuildContext context) => MyApp()),
+                        builder: (BuildContext context) => QuizMain(quizInfo: quizInfo,)),
                   );
                 },
                 child: Text(

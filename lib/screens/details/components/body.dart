@@ -1,4 +1,5 @@
 import 'package:amrita_quizzes/constants/color_constants.dart';
+import 'package:amrita_quizzes/models/Questions.dart';
 //import 'package:amrita_quizzes/models/Quiz_info.dart';
 import 'package:amrita_quizzes/models/Quiz.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,14 @@ class Body extends StatelessWidget {
   const Body({Key key, this.quizInfo}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    questionList.clear();
+    answerIndexes.clear();
+    quizDuration = quizInfo.duration;
+    for (var i in quizInfo.questions) {
+      questionList.add(i);
+    }
+    print("questionfb");
+    print(questionList);
     // It provide us total height and width
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(

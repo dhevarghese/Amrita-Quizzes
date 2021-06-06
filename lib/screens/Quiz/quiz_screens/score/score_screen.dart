@@ -1,9 +1,6 @@
+import 'package:amrita_quizzes/controllers/question_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:amrita_quizzes/constants/color_constants.dart';
-import 'package:amrita_quizzes/controllers/question_controller.dart';
-//import 'package:websafe_svg/websafe_svg.dart';
-import 'package:flutter_svg/svg.dart';
 
 class ScoreScreen extends StatelessWidget {
   @override
@@ -34,7 +31,7 @@ class ScoreScreen extends StatelessWidget {
               ),
               Spacer(),
               Text(
-                "${_qnController.correctAns * 10}/${_qnController.questions.length * 10}",
+                "${_qnController.numOfCorrectAns * 10}/${_qnController.questions.length * 10}",
                 style: Theme.of(context)
                     .textTheme
                     .headline4

@@ -1,6 +1,6 @@
+import 'package:amrita_quizzes/controllers/question_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:amrita_quizzes/controllers/question_controller.dart';
 
 import 'components/body.dart';
 
@@ -15,7 +15,8 @@ class QuizScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
-          FlatButton(onPressed: _controller.nextQuestion, child: Text("Skip")),
+          FlatButton(onPressed: _controller.prevQuestion, child: Text("Previous")),
+          FlatButton(onPressed: _controller.nextQuestion, child: Text("Next")),
         ],
       ),
       body: Body(),

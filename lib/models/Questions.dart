@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 class Question {
   final int id, answer;
   final String question;
@@ -52,3 +54,7 @@ const List sample_data = [
     "answer_index": 1,
   },
 ];
+
+List<Question> questionList = [];
+LinkedHashMap answerIndexes = new LinkedHashMap<int, int>();
+String quizDuration = "";

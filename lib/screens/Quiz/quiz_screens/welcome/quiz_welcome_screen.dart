@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:amrita_quizzes/constants/color_constants.dart';
 import 'package:amrita_quizzes/screens/Quiz/quiz_screens/quiz/quiz_screen.dart';
-//import 'package:websafe_svg/websafe_svg.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class WelcomeScreen extends StatelessWidget {
   @override
@@ -52,7 +50,12 @@ class WelcomeScreen extends StatelessWidget {
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(kDefaultPadding * 0.75), // 15
                       decoration: BoxDecoration(
-                        gradient: kPrimaryGradient,
+                        gradient:  LinearGradient(
+                          colors: [Color(0xFF46A0AE), Color(0xFF00FFCB)],
+                          //colors: [Color(0x1B1429), Color(0x1B1429)],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
                         borderRadius: BorderRadius.all(Radius.circular(12)),
                       ),
                       child: Text(

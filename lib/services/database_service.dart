@@ -14,6 +14,9 @@ abstract class Database {
   Future<List> getUsers();
   Future<Quiz> getQuizById(String id);
   Future<QuizUser> getUserDetails();
+  Future<void> updateQuiz(String quizId, [Map updateData, List qTakers]);
+  Future<void> deleteQuiz(Quiz q);
+  Future<void> updateQuizQuestions(String quizId, List<Question> questions);
 }
 
 class DatabaseService implements Database {
@@ -162,20 +165,21 @@ class DatabaseService implements Database {
 
   Future<void> addQuiz(Quiz q, String uid) async {
     //print(q.toJson());
-    await quizCollection.doc(q.title).set(q.toJson());
-    for(int i = 0; i< q.questions.length; i++) {
-      await quizCollection.doc(q.title).collection("Questions").doc("Question"+(i+1).toString()).set(q.getQuestionJson(i));
-      print(q.getQuestionJson(i));
-    }
+    //await quizCollection.doc(q.title).set(q.toJson());
     var autoID = quizCollection.doc().id;
-    await quizCollection.doc(q.title).update({'id': autoID});
-    await userCollection.doc(uid).update({'quizzes_created': FieldValue.arrayUnion([q.title])});
+    await quizCollection.doc(autoID).set(q.toJson());
+    for(int i = 0; i< q.questions.length; i++) {
+      await quizCollection.doc(autoID).collection("Questions").doc("Question"+(i+1).toString()).set(q.getQuestionJson(i));
+      //print(q.getQuestionJson(i));
+    }
+    await quizCollection.doc(autoID).update({'id': autoID});
+    await userCollection.doc(uid).update({'quizzes_created': FieldValue.arrayUnion([autoID])});
     for(var user in q.takers){
       var db_users = await userCollection.where('name', isEqualTo: user).get();
       for(var db_user in db_users.docs){
-        print(db_user.id);
-        print(db_user.data());
-        userCollection.doc(db_user.id).update({'quizzes_to_take': FieldValue.arrayUnion([q.title]),});
+        //print(db_user.id);
+        //print(db_user.data());
+        userCollection.doc(db_user.id).update({'quizzes_to_take': FieldValue.arrayUnion([autoID]),});
       }
     }
     //Reference storageRef = FirebaseStorage.instance.ref().child('quizDashImages');
@@ -186,11 +190,58 @@ class DatabaseService implements Database {
     return await uploadTask.whenComplete((){
       uploadTask.snapshot.ref.getDownloadURL().then((fileURL) {
         imageURL = fileURL;
-        quizCollection.doc(q.title).update({'image': imageURL});
+        quizCollection.doc(autoID).update({'image': imageURL});
       });
     });
     //print('File Uploaded');
 
   }
 
+  Future<void> updateQuizQuestions(String quizId, List<Question> questions) async {
+    for(Question ques in questions){
+      await quizCollection.doc(quizId).collection("Questions").doc("Question"+(ques.id).toString()).set(ques.toJson());
+    }
+    return true;
+  }
+
+  Future<void> updateQuiz(String quizId, [Map updateData, List qTakers]) async {
+    Map keyMap = {'qName': 'title', 'qDesc' : 'description', 'qPass': 'password', 'qMarks': 'marks',  'qCategory': 'category', 'qStartDate' : 'startTime', 'qEndDate' : 'endTime', 'qDuration': 'duration'};
+    updateData.forEach((key, value) async {
+      if(value != null && value != ""){
+        if(keyMap[key] == "marks"){
+          value = int.parse(value);
+        }
+        await quizCollection.doc(quizId).update({
+          keyMap[key]: value
+        });
+      }
+    });
+    if(qTakers != null){
+      await quizCollection.doc(quizId).update({
+        'takers': FieldValue.arrayUnion(qTakers)
+      });
+      for(var user in qTakers){
+        var dbUsers = await userCollection.where('name', isEqualTo: user).get();
+        for(var dbUser in dbUsers.docs){
+          userCollection.doc(dbUser.id).update({'quizzes_to_take': FieldValue.arrayUnion([quizId]),});
+        }
+      }
+    }
+    return true;
+  }
+
+  Future<void> deleteQuiz(Quiz q) async {
+    //await userCollection.doc(uid).update({'quizzes_created': FieldValue.arrayRemove([q.id])});
+    for(var user in q.takers){
+      var dbUsers = await userCollection.where('name', isEqualTo: user).get();
+      for(var dbUser in dbUsers.docs){
+        await userCollection.doc(dbUser.id).update({'quizzes_to_take': FieldValue.arrayRemove([q.id]),});
+      }
+    }
+    for(int i = 1; i<= q.questions.length; i++){
+      await quizCollection.doc(q.id).collection("Questions").doc("Question"+i.toString()).delete();
+    }
+    await quizCollection.doc(q.id).delete();
+    return true;
+  }
 }

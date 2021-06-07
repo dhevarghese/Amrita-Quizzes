@@ -73,7 +73,7 @@ class TakeUpQuiz extends StatelessWidget {
     );
 
     Widget yesButton = TextButton(
-      child: Text("YES"),
+      child: Text("YES", style: TextStyle(color: Colors.redAccent),),
       onPressed: () {
         Navigator.of(context).pop();
         if(dbs != null){

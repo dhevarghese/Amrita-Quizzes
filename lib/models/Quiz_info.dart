@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart';
 
-class Quiz_info {
+import 'package:flutter/material.dart';
+
+class Quiz {
    String image, title, description, price, faculty, duration, category;
    int  size, id, marks;
    Color color;
-  Quiz_info({
+  Quiz({
     this.id,
     this.image,
     this.title,
@@ -60,8 +59,8 @@ Future<void> readJsonProduct() async {
 }
 */
 //List test = [];
-List<Quiz_info> productstest = [];
-List<Quiz_info> products = [];
+List<Quiz> productstest = [];
+List<Quiz> products = [];
 /*
 List<Product> products = [
   Product(

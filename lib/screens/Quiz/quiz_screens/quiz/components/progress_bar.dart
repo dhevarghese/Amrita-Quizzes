@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:amrita_quizzes/constants/color_constants.dart';
 import 'package:amrita_quizzes/controllers/question_controller.dart';
+import 'package:amrita_quizzes/models/Questions.dart';
+import 'package:flutter/material.dart';
 //import 'package:websafe_svg/websafe_svg.dart';
 import 'package:flutter_svg/svg.dart';
-
-import 'package:amrita_quizzes/constants/color_constants.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 
 class ProgressBar extends StatelessWidget {
   const ProgressBar({
@@ -29,7 +29,7 @@ class ProgressBar extends StatelessWidget {
               // constraints.maxWidth needed for our animation
               LayoutBuilder(
                 builder: (context, constraints) => Container(
-                  // from 0 to 1 it takes 60s
+                  // from 0 to 1
                   width: constraints.maxWidth * controller.animation.value,
                   decoration: BoxDecoration(
                     gradient: kPrimaryGradient,
@@ -44,7 +44,7 @@ class ProgressBar extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("${(controller.animation.value * 60).round()} sec"),
+                      Text("${(int.parse(quizDuration) - ((controller.animation.value)*double.parse(quizDuration))).toStringAsFixed(2)} min left"),
                       SvgPicture.asset("assets/icons/clock.svg"),
                     ],
                   ),

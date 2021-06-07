@@ -1,137 +1,317 @@
-import 'dart:convert';
-
+import 'package:amrita_quizzes/common_widgets/platform_alert_dialog.dart';
+import 'package:amrita_quizzes/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:amrita_quizzes/constants/color_constants.dart';
-import 'package:amrita_quizzes/models/Quiz_info.dart';
+import 'package:amrita_quizzes/constants/strings.dart';
+import 'package:amrita_quizzes/models/Quiz.dart';
+import 'package:amrita_quizzes/screens/addquiz/add_quiz_screen.dart';
 import 'package:amrita_quizzes/screens/details/details_screen.dart';
+import 'package:amrita_quizzes/screens/home/components/qr.dart';
+import 'package:amrita_quizzes/screens/profile/profile_screen.dart';
+import 'package:amrita_quizzes/services/auth_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_search_bar/flutter_search_bar.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
-import 'categorries.dart';
+import 'categories.dart';
 import 'quiz_card.dart';
 
 class Body extends StatefulWidget {
-  Body({Key key}) : super(key: key);
+  final List<Quiz> qList;
+  Body(this.qList, {Key key}) : super(key: key);
 
   _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-  List test = [];
-  String SelectedCategory = "CSE";
+  List<Quiz> quizzes = [];
+  String selectedCategory = "";
   int selectedIndex = 0;
+  SearchBar searchBar;
+  String searchBarText="";
+  bool _searching = false;
+  int curPage = 0;
 
-
-  Future<void> readJsonProducttemp() async {
-    final String response = await rootBundle.loadString('assets/QuizInfo.json');
-    final data = await json.decode(response);
-    //_items = data["Categories"];
-    setState(() {
-      test = data["QuizInfo"];
-      products.clear();
-      productstest.clear();
-
-      //print(test);
-      for (int i = 0; i < test.length; i++) {
-        var tempid = int.parse(test[i]["id"]);
-        var temptitle = test[i]["title"];
-        var tempprice = test[i]["price"];
-        var tempsize = test[i]["size"];
-        var tempimage = test[i]["image"];
-        var tempcolor = Color(int.parse(test[i]["colorcode"]));
-        //var tempdescription = test[i]["description"];
-        var tempdescription ="This quiz will assess your knowledge on the topics covered in the first four weeks of the semester. Marks will be taken into account for continuous assessment.";
-        var tempfaculty = test[i]["faculty"];
-        var tempmarks = test[i]["marks"];
-        var tempduration = test[i]["duration"];
-
-        var temp_quiz_info = Quiz_info(
-            id: tempid,
-            title: temptitle,
-            price: tempprice,
-            size: tempsize,
-            image: tempimage,
-            color: tempcolor,
-            description: tempdescription,
-            faculty: tempfaculty,
-            marks: tempmarks,
-            duration: tempduration);
-
-        if(test[i]["category"] == SelectedCategory) {
-          productstest.add(temp_quiz_info);
-          products.add(temp_quiz_info);
-          print(temp_quiz_info.image);
-          print(SelectedCategory);
-        }
-        //productstest.add(temp_quiz_info);
-
-        //products.add(temp_quiz_info);// comment this later, used for test
-
-        //print(temp_quiz_info.image);
-        //print(SelectedCategory);
-
+  List<Quiz> filterQList(String filter)  {
+    List<Quiz> filterQ = [];
+    for (var quiz in widget.qList) {
+      if(quiz.category == filter) {
+        filterQ.add(quiz);
+      }
     }
-    });
+    return filterQ;
+  }
+
+  void filterSearch(String searchFilter) {
+    searchBarText = searchFilter;
+    if(searchFilter == ""){
+      _searching = false;
+      quizzes =filterQList(selectedCategory);
+      setState(() {});
+    }
+    else{
+      List<Quiz> searchQ = [];
+      for (var quiz in widget.qList) {
+        if(quiz.title.toString().toLowerCase().contains(searchFilter.toLowerCase())) {
+          searchQ.add(quiz);
+        }
+      }
+      quizzes = searchQ;
+      _searching = true;
+      setState(() {});
+    }
   }
 
   callback(newSelectedCategory) {
     setState(() {
-      SelectedCategory = newSelectedCategory;
-      readJsonProducttemp();
+      selectedCategory = newSelectedCategory;
+      quizzes =filterQList(selectedCategory);
+
     });
   }
-
 
   @override
   void initState() {
     super.initState();
-    readJsonProducttemp();
+    if (widget.qList.length != 0) {
+      selectedCategory = widget.qList[0].category;
+    }
+    quizzes = filterQList(selectedCategory);
+    searchBar = SearchBar(
+        buildDefaultAppBar: buildAppBar,
+        setState: setState,
+        onChanged: (value){
+          if(value==""){
+            filterSearch("");
+          }
+        },
+        onCleared: () {
+          filterSearch("");
+        },
+        onClosed: () {
+          filterSearch("");
+        },
+        onSubmitted: (value){
+          filterSearch(value);
+        },
+        inBar: false
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return quizDisplay();
+    //return (widget.qList.length == 0) ?  noQuizzes() : quizDisplay();
+    return _buildQuizzes();
+  }
+
+  Widget _buildQuizzes(){
+    PageController _myPage = PageController(initialPage: 0);
+    //Icon menuIcon = Icon(Icons.menu, color: (curPage==0)? Colors.lightBlueAccent: Colors.black);
+    //Icon ProfileIcon = Icon(Icons.person, color: (curPage==1)? Colors.lightBlueAccent: Colors.black);
+    return Scaffold(
+      appBar: searchBar.build(context),
+      //body: (quizzes.length==0) ? emptySearch() : quizDisplay(),
+      body: PageView(
+        controller: _myPage,
+        onPageChanged: (pageNum) {
+          print('Page Changes to index $pageNum');
+          curPage = pageNum;
+          if(curPage==1){
+            searchBarText="Profile";
+          }
+          else{
+            searchBarText="";
+          }
+          /*setState(() {
+            curPage = pageNum;
+          });*/
+        },
+        children: [
+          (quizzes.length==0) ? emptySearch() : quizDisplay(),
+          Profile()
+        ],
+        physics: NeverScrollableScrollPhysics(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.lightBlueAccent,
+        elevation: 4.0,
+        onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddQuizScreen(),
+            )
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+                onPressed: (){
+                  setState(() {
+                    _myPage.jumpToPage(0);
+                  });
+                },
+                icon: Icon(Icons.menu, color: (curPage==0)? Colors.lightBlueAccent: Colors.black)
+            ),
+            IconButton(
+                onPressed: (){
+                  setState(() {
+                    _myPage.jumpToPage(1);
+                  });
+                },
+                icon: Icon(Icons.person, color: (curPage==1)? Colors.lightBlueAccent: Colors.black)
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget emptySearch(){
+    return Container(
+        child: Center(
+            child: Text('No Quizzes Found!', style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),)
+        )
+    );
+  }
+
+  Widget noQuizzes() {
+    return Scaffold(
+        body: Center(
+            child: Text('No Quizzes To Take at this moment', style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),)
+        )
+    );
   }
 
   Widget quizDisplay(){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: kDefaultPaddin),
-          child: Text(
-            "$SelectedCategory Quizzes ",
-            style: Theme.of(context)
-                .textTheme
-                .headline5
-                .copyWith(fontWeight: FontWeight.bold),
+        Visibility(
+            visible: _searching,
+            child: SizedBox(height: 15,)
+        ),
+        Visibility(
+          visible: !_searching,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kDefaultPaddin),
+            child: Text(
+              "$selectedCategory Quizzes ",
+              style: Theme.of(context)
+                  .textTheme
+                  .headline5
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
           ),
         ),
-
-        Categories(SelectedCategory, callback),
+        Visibility(
+            visible: !_searching,
+            child: Categories(selectedCategory, callback, widget.qList),
+        ),
+        //Categories(selectedCategory, callback, widget.qList),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: kDefaultPaddin),
-            child: GridView.builder(
-                itemCount: products.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: kDefaultPaddin,
-                  crossAxisSpacing: kDefaultPaddin,
-                  childAspectRatio: 0.75 ,
-                ),
-                itemBuilder: (context, index) => ItemCard(
-                  quiz_info: products[index],
-                  press: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailsScreen(
-                          quiz_info: products[index],
-                        ),
-                      )),
-                )),
+            child: _quizGridView(quizzes),
           ),
         ),
       ],
     );
+  }
+
+  GridView _quizGridView(List<Quiz> data) {
+    return GridView.builder(
+        itemCount: data.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: kDefaultPaddin,
+          crossAxisSpacing: kDefaultPaddin,
+          childAspectRatio: 0.75 ,
+        ),
+        itemBuilder: (context, index) => ItemCard(
+          quiz_info: data[index],
+          press: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailsScreen(
+                  mode:1,
+                  quiz_info: data[index],
+                ),
+              )),
+        ));
+  }
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () {
+          _confirmSignOut(context);
+        },
+      ),
+      title: Text(searchBarText),
+      actions: <Widget>[
+        if(curPage==0)
+          searchBar.getSearchAction(context),
+
+        Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: SvgPicture.asset(
+                "assets/icons/qr.svg",
+                // By default our  icon color is white
+                color: kTextColor,
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => QRViewExample()),
+                );
+              },
+            );
+          },
+        ),
+        SizedBox(width: kDefaultPaddin / 2)
+      ],
+    );
+  }
+
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      final AuthService auth = Provider.of<AuthService>(context, listen: false);
+      await auth.signOut();
+    } on PlatformException catch (e) {
+      await PlatformExceptionAlertDialog(
+        title: Strings.logoutFailed,
+        exception: e,
+      ).show(context);
+    }
+  }
+
+  Future<void> _confirmSignOut(BuildContext context) async {
+    final bool didRequestSignOut = await PlatformAlertDialog(
+      title: Strings.logout,
+      content: Strings.logoutAreYouSure,
+      cancelActionText: Strings.cancel,
+      defaultActionText: Strings.logout,
+    ).show(context);
+    if (didRequestSignOut == true) {
+      _signOut(context);
+    }
   }
 }

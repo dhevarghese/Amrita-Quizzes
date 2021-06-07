@@ -1,15 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:amrita_quizzes/models/Quiz_info.dart';
-
 import 'package:amrita_quizzes/constants/color_constants.dart';
+import 'package:amrita_quizzes/models/Quiz.dart';
+import 'package:flutter/material.dart';
 
-class ProductTitleWithImage extends StatelessWidget {
-  const ProductTitleWithImage({
+class QuizTitleWithImage extends StatelessWidget {
+  const QuizTitleWithImage({
     Key key,
-    @required this.quiz_info,
+    @required this.quizInfo,
   }) : super(key: key);
 
-  final Quiz_info quiz_info;
+  final Quiz quizInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,7 @@ class ProductTitleWithImage extends StatelessWidget {
         children: <Widget>[
           Text(
             //"Aristocratic Hand Bag",
-            quiz_info.title,
+            quizInfo.title,
             //style: TextStyle(color: Colors.white),
               style: Theme.of(context)
               .textTheme
@@ -28,14 +27,13 @@ class ProductTitleWithImage extends StatelessWidget {
               .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           Text(
-            "\ ${quiz_info.marks} marks",
+            "\ ${quizInfo.marks} marks",
             style: TextStyle(color: Colors.white),
             //style: Theme.of(context)
                 //.textTheme
                 //.headline4
                // .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: kDefaultPaddin),
           Row(
             children: <Widget>[
               RichText(
@@ -43,7 +41,7 @@ class ProductTitleWithImage extends StatelessWidget {
                   children: [
                     TextSpan(text: "Duration\n"),
                     TextSpan(
-                      text: quiz_info.duration,
+                      text: quizInfo.duration,
                       style: Theme.of(context).textTheme.headline4.copyWith(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
@@ -53,10 +51,11 @@ class ProductTitleWithImage extends StatelessWidget {
               SizedBox(width: kDefaultPaddin),
               Expanded(
                 child: Hero(
-                  tag: "${quiz_info.id}",
-                  child: Image.asset(
-                    quiz_info.image,
-                    fit: BoxFit.fill,
+                  tag: "${quizInfo.id}",
+                  child: Image.network(
+                    quizInfo.imageLink,
+                    height: 230,
+                    width: 250,
                   ),
                 ),
               )

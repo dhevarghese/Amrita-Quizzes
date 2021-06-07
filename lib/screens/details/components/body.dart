@@ -1,19 +1,30 @@
-import 'package:flutter/material.dart';
 import 'package:amrita_quizzes/constants/color_constants.dart';
-import 'package:amrita_quizzes/models/Quiz_info.dart';
+import 'package:amrita_quizzes/models/Questions.dart';
+//import 'package:amrita_quizzes/models/Quiz_info.dart';
+import 'package:amrita_quizzes/models/Quiz.dart';
+import 'package:flutter/material.dart';
 
-import 'take_up_quiz_button.dart';
-import 'StartTime_and_faculty.dart';
+import 'creator_and_timings.dart';
 //import 'counter_with_fav_btn_temp.dart';
 import 'description.dart';
 import 'quiz_title_with_image.dart';
+import 'take_up_quiz_button.dart';
 
 class Body extends StatelessWidget {
-  final Quiz_info quiz_info;
+  final Quiz quizInfo;
+  final int mode;
 
-  const Body({Key key, this.quiz_info}) : super(key: key);
+  const Body({Key key, this.quizInfo, this.mode}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    questionList.clear();
+    answerIndexes.clear();
+    quizDuration = quizInfo.duration;
+    for (var i in quizInfo.questions) {
+      questionList.add(i);
+    }
+    print("questionfb");
+    print(questionList);
     // It provide us total height and width
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
@@ -40,17 +51,22 @@ class Body extends StatelessWidget {
                   ),
                   child: Column(
                     children: <Widget>[
-                      ColorAndSize(quiz_info: quiz_info),
+                      CreatorAndTimings(quizInfo: quizInfo),
                       SizedBox(height: kDefaultPaddin / 2),
-                      Description(quiz_info: quiz_info),
+                      Description(quizInfo: quizInfo),
                       SizedBox(height: kDefaultPaddin / 2),
-                      //CounterWithFavBtn(),
-                      SizedBox(height: kDefaultPaddin / 2),
-                      AddToCart(quiz_info: quiz_info)
+                      if(mode==1)
+                        TakeUpQuiz(quizInfo: quizInfo, displayText: "Take up quiz", mode:mode),
+                      if(mode==0)
+                        TakeUpQuiz(quizInfo:quizInfo, displayText: "Edit Quiz", mode:mode),
+                      if(mode==0)
+                        TakeUpQuiz(quizInfo:quizInfo, displayText: "Edit Questions", mode:mode),
+                      if(mode==0)
+                        TakeUpQuiz(quizInfo:quizInfo, displayText: "Delete Quiz", mode:mode),
                     ],
                   ),
                 ),
-                ProductTitleWithImage(quiz_info: quiz_info)
+                QuizTitleWithImage(quizInfo: quizInfo)
               ],
             ),
           )

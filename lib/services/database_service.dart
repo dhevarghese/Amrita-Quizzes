@@ -1,5 +1,6 @@
 import 'package:amrita_quizzes/models/Questions.dart';
 import 'package:amrita_quizzes/models/Quiz.dart';
+import 'package:amrita_quizzes/models/QuizUser.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -8,9 +9,14 @@ abstract class Database {
   Future<String> getUserName();
   Future<void> addQuiz(Quiz q, String uid);
   Future<int> numberOfQuizzes();
-  Future<List<Quiz>> getQuizzes();
+  Future<List<Quiz>> getQuizzes(String category);
   //Future<Map> getUsers();
   Future<List> getUsers();
+  Future<Quiz> getQuizById(String id);
+  Future<QuizUser> getUserDetails();
+  Future<void> updateQuiz(String quizId, [Map updateData, List qTakers]);
+  Future<void> deleteQuiz(Quiz q);
+  Future<void> updateQuizQuestions(String quizId, List<Question> questions);
 }
 
 class DatabaseService implements Database {
@@ -23,7 +29,7 @@ class DatabaseService implements Database {
   final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
 
   Future<void> updateUserData(String name, String dept, String section) async {
-    return await userCollection.doc(uid).set({
+    return await userCollection.doc(uid).update({
       'name': name,
       'department': dept,
       'section':section,
@@ -37,6 +43,15 @@ class DatabaseService implements Database {
       uName = ds.get("name");
     }).catchError((e){});
     return uName;
+  }
+
+  Future<QuizUser> getUserDetails() async {
+    QuizUser qUser;
+    await userCollection.doc(uid).get().then((DocumentSnapshot ds) {
+      print(ds.data());
+      qUser = QuizUser.fromJson(ds.data());
+    }).catchError((e){});
+    return qUser;
   }
 
   /*
@@ -60,7 +75,6 @@ class DatabaseService implements Database {
 
   Future<List> getUsers() async{
     List users = [];
-    //print("hello");
     await userCollection.get().then((value){
       for(var i in value.docs){
         users.add(i.data()['name']);
@@ -73,11 +87,48 @@ class DatabaseService implements Database {
     return quizCollection.snapshots().length;
   }
 
-  Future<List<Quiz>> getQuizzes() async{
+  Future<Quiz> getQuizById(String id) async {
+    var qs = await quizCollection.where('id', isEqualTo: id).get();
+    //print(qs.docs[0].data());
+    Quiz qById;
+    if(qs.docs.length > 0) {
+      var quizData = qs.docs[0].data();
+      quizData['startTime'] = quizData['startTime'].toDate();
+      quizData['endTime'] = quizData['endTime'].toDate();
+      quizData['numQuestions'] = quizData['numQuestions'].toDouble();
+      qById  = Quiz.fromJson(quizData);
+
+      await quizCollection.doc(qs.docs[0].id).collection("Questions").get().then((questions) {
+        for(var question in questions.docs){
+          Question _question = Question.fromJson(question.data());
+          qById.addQuestions(_question);
+        }
+      });
+      return qById;
+    }
+
+    else {
+      qById = Quiz.fromJson({'starttime': DateTime(2017, 9, 7, 17, 30),'endtime': DateTime(2017, 9, 7, 17, 30),'duration':'' ,'numQuestions':0.0 ,'marks':0 });
+      return qById;
+    }
+    /*
+    for(var q in qs.docs) {
+      print("in getQuizById");
+      print(q.id);
+      print(q.data());
+      //userCollection.doc(db_user.id).update({'quizzes_to_take': FieldValue.arrayUnion([q.title]),});
+
+    }
+    */
+  }
+
+
+
+  Future<List<Quiz>> getQuizzes(String category) async{
     List quizzesToTake = [];
     List<Quiz> qList = [];
     await userCollection.doc(uid).get().then((DocumentSnapshot ds) {
-      quizzesToTake = ds.get("quizzes_to_take");
+      quizzesToTake = ds.get(category);
       /*quizCollection.get().then((value){
         for(var i in value.docs){
           var quizData = i.data();
@@ -114,34 +165,83 @@ class DatabaseService implements Database {
 
   Future<void> addQuiz(Quiz q, String uid) async {
     //print(q.toJson());
-    await quizCollection.doc(q.title).set(q.toJson());
-    for(int i = 0; i< q.questions.length; i++) {
-      await quizCollection.doc(q.title).collection("Questions").doc("Question"+(i+1).toString()).set(q.getQuestionJson(i));
-      print(q.getQuestionJson(i));
-    }
+    //await quizCollection.doc(q.title).set(q.toJson());
     var autoID = quizCollection.doc().id;
-    await quizCollection.doc(q.title).update({'id': autoID});
-    await userCollection.doc(uid).update({'quizzes_created': FieldValue.arrayUnion([q.title])});
+    await quizCollection.doc(autoID).set(q.toJson());
+    for(int i = 0; i< q.questions.length; i++) {
+      await quizCollection.doc(autoID).collection("Questions").doc("Question"+(i+1).toString()).set(q.getQuestionJson(i));
+      //print(q.getQuestionJson(i));
+    }
+    await quizCollection.doc(autoID).update({'id': autoID});
+    await userCollection.doc(uid).update({'quizzes_created': FieldValue.arrayUnion([autoID])});
     for(var user in q.takers){
       var db_users = await userCollection.where('name', isEqualTo: user).get();
       for(var db_user in db_users.docs){
-        print(db_user.id);
-        print(db_user.data());
-        userCollection.doc(db_user.id).update({'quizzes_to_take': FieldValue.arrayUnion([q.title]),});
+        //print(db_user.id);
+        //print(db_user.data());
+        userCollection.doc(db_user.id).update({'quizzes_to_take': FieldValue.arrayUnion([autoID]),});
       }
     }
-    Reference storageRef = FirebaseStorage.instance.ref().child('quizDashImages');
+    //Reference storageRef = FirebaseStorage.instance.ref().child('quizDashImages');
+    Reference storageRef = FirebaseStorage.instance.ref().child(q.id);
     UploadTask uploadTask = storageRef.putFile(q.image);
     // Waits till the file is uploaded then stores the download url
     String imageURL="";
     return await uploadTask.whenComplete((){
       uploadTask.snapshot.ref.getDownloadURL().then((fileURL) {
         imageURL = fileURL;
-        quizCollection.doc(q.title).update({'image': imageURL});
+        quizCollection.doc(autoID).update({'image': imageURL});
       });
     });
     //print('File Uploaded');
 
   }
 
+  Future<void> updateQuizQuestions(String quizId, List<Question> questions) async {
+    for(Question ques in questions){
+      await quizCollection.doc(quizId).collection("Questions").doc("Question"+(ques.id).toString()).set(ques.toJson());
+    }
+    return true;
+  }
+
+  Future<void> updateQuiz(String quizId, [Map updateData, List qTakers]) async {
+    Map keyMap = {'qName': 'title', 'qDesc' : 'description', 'qPass': 'password', 'qMarks': 'marks',  'qCategory': 'category', 'qStartDate' : 'startTime', 'qEndDate' : 'endTime', 'qDuration': 'duration'};
+    updateData.forEach((key, value) async {
+      if(value != null && value != ""){
+        if(keyMap[key] == "marks"){
+          value = int.parse(value);
+        }
+        await quizCollection.doc(quizId).update({
+          keyMap[key]: value
+        });
+      }
+    });
+    if(qTakers != null){
+      await quizCollection.doc(quizId).update({
+        'takers': FieldValue.arrayUnion(qTakers)
+      });
+      for(var user in qTakers){
+        var dbUsers = await userCollection.where('name', isEqualTo: user).get();
+        for(var dbUser in dbUsers.docs){
+          userCollection.doc(dbUser.id).update({'quizzes_to_take': FieldValue.arrayUnion([quizId]),});
+        }
+      }
+    }
+    return true;
+  }
+
+  Future<void> deleteQuiz(Quiz q) async {
+    //await userCollection.doc(uid).update({'quizzes_created': FieldValue.arrayRemove([q.id])});
+    for(var user in q.takers){
+      var dbUsers = await userCollection.where('name', isEqualTo: user).get();
+      for(var dbUser in dbUsers.docs){
+        await userCollection.doc(dbUser.id).update({'quizzes_to_take': FieldValue.arrayRemove([q.id]),});
+      }
+    }
+    for(int i = 1; i<= q.questions.length; i++){
+      await quizCollection.doc(q.id).collection("Questions").doc("Question"+i.toString()).delete();
+    }
+    await quizCollection.doc(q.id).delete();
+    return true;
+  }
 }

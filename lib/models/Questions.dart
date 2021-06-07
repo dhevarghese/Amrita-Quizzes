@@ -1,11 +1,13 @@
 import 'dart:collection';
 
-class Question {
-  final int id, answer;
+import 'package:equatable/equatable.dart';
+
+class Question extends Equatable{
+  final int id, answer, mark;
   final String question;
   final List options;
 
-  Question({this.id, this.question, this.answer, this.options});
+  Question({this.id, this.question, this.answer, this.options, this.mark});
 
   Map<String, dynamic> toJson() =>
       {
@@ -13,18 +15,23 @@ class Question {
         'question':question,
         'answer': answer,
         'options':options,
+        'mark':mark,
       };
 
   Question.fromJson(Map parsedJson) :
         options = parsedJson['options'] ?? '',
         question = parsedJson['question'] ?? '',
         answer = parsedJson['answer'],
+        mark = parsedJson['mark'],
         id = parsedJson['id'];
 
   @override
   String toString(){
-    return this.id.toString() +" "+ this.question +" "+ this.options.toString()+" "+ this.answer.toString();
+    return this.id.toString() +" "+ this.question +" "+ this.options.toString()+" "+ this.answer.toString()+ " "+ this.mark.toString();
   }
+
+  @override
+  List<Object> get props => [id, question, answer, options, mark];
 }
 
 const List sample_data = [

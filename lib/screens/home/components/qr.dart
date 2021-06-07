@@ -124,6 +124,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                                     MaterialPageRoute(
                                       builder: (context) =>
                                           DetailsScreen(
+                                            mode:1,
                                             quiz_info: quiz,
                                           ),
                                     ));

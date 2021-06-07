@@ -6,15 +6,16 @@ import 'package:flutter_svg/svg.dart';
 
 class DetailsScreen extends StatelessWidget {
   final Quiz quiz_info;
+  final int mode;
 
-  const DetailsScreen({Key key, this.quiz_info}) : super(key: key);
+  const DetailsScreen({Key key, this.mode, this.quiz_info}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // each product have a color
       backgroundColor: Color(int.parse('0x'+quiz_info.color)),
       appBar: buildAppBar(context),
-      body: Body(quizInfo: quiz_info),
+      body: Body(quizInfo: quiz_info, mode: mode),
     );
   }
 

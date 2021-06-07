@@ -79,6 +79,23 @@ class _AddQuizScreenState extends State<AddQuizScreen> {
             key: _formKey,
             child: Column(
               children: [
+                if(!addMode)
+                  Card(
+                    margin: EdgeInsets.fromLTRB(16.0,16,16,0),
+                    shadowColor: Colors.redAccent,
+                    child: ListTile(
+                      leading: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Icon(Icons.info,
+                            color: Colors.redAccent
+                        ),
+                      ),
+                      title: Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text("All fields need not be filled to update Quiz details! ", style: TextStyle(color: Colors.redAccent),),
+                      ),
+                    )
+                  ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(

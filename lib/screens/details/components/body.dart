@@ -12,8 +12,9 @@ import 'take_up_quiz_button.dart';
 
 class Body extends StatelessWidget {
   final Quiz quizInfo;
+  final int mode;
 
-  const Body({Key key, this.quizInfo}) : super(key: key);
+  const Body({Key key, this.quizInfo, this.mode}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     questionList.clear();
@@ -54,7 +55,14 @@ class Body extends StatelessWidget {
                       SizedBox(height: kDefaultPaddin / 2),
                       Description(quizInfo: quizInfo),
                       SizedBox(height: kDefaultPaddin / 2),
-                      TakeUpQuiz(quizInfo: quizInfo)
+                      if(mode==1)
+                        TakeUpQuiz(quizInfo: quizInfo, displayText: "Take up quiz", mode:mode),
+                      if(mode==0)
+                        TakeUpQuiz(quizInfo:quizInfo, displayText: "Edit Quiz", mode:mode),
+                      if(mode==0)
+                        TakeUpQuiz(quizInfo:quizInfo, displayText: "Edit Questions", mode:mode),
+                      if(mode==0)
+                        TakeUpQuiz(quizInfo:quizInfo, displayText: "Delete Quiz", mode:mode),
                     ],
                   ),
                 ),

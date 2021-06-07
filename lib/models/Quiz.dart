@@ -12,7 +12,7 @@ class Quiz {
   final double numQuestions;
   File image;
   List<Question> questions = [];
-  List<String> takers;
+  List takers;
   String imageLink = "";
 
   Quiz({
@@ -70,6 +70,7 @@ class Quiz {
     numQuestions = parsedJson['numQuestions'],
     marks = parsedJson['marks'],
     id = parsedJson['id'] ?? '', // the doc ID, helpful to have
+    takers = parsedJson['takers'] ?? [],
     imageLink = parsedJson['image'] ?? '',
     color = parsedJson['color'] ?? '';
 

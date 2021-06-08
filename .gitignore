@@ -96,6 +96,7 @@ app.*.map.json
 
 # Coverage
 coverage/
+coverag/
 
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3

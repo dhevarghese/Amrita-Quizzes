@@ -48,6 +48,12 @@ class QuestionController extends GetxController
   int _numOfCorrectAns = 0;
   int get numOfCorrectAns => this._numOfCorrectAns;
 
+  int _marksObtained = 0;
+  int get marksObtained => this._marksObtained;
+
+  int _totalMarks = 0;
+  int get totalMarks => this._totalMarks;
+
   // called immediately after the widget is allocated memory
   @override
   void onInit() {
@@ -100,11 +106,12 @@ class QuestionController extends GetxController
     // start our animation
     // Once 60s is completed go to the next qn
 
-    _animationController.forward().whenComplete(nextQuestion);
+    _animationController.forward().whenComplete(timerDone);
     //nextQuestion();
 
     _pageController = PageController();
     super.onInit();
+    print("idk why im here");
     //Get.to(ScoreScreen());
   }
 
@@ -152,7 +159,7 @@ class QuestionController extends GetxController
 
       // Then start it again
       // Once timer is finish go to the next qn
-      _animationController.forward().whenComplete(nextQuestion);
+      _animationController.forward().whenComplete(timerDone);
     } else {
       // Get package provide us simple way to naviigate another page
       //test start
@@ -161,11 +168,13 @@ class QuestionController extends GetxController
       while (j<questions.length) {
         if(answerIndexes[questions[j].id] == questions[j].answer) {
           correctAnsCount++;
+          _marksObtained += questions[j].mark;
         }
+        _totalMarks += questions[j].mark;
         j++;
       }
-      print("correctAnsCount is");
-      print(correctAnsCount);
+      print("marks obtained ");
+      print(marksObtained);
       _numOfCorrectAns = correctAnsCount;
 
       //test end
@@ -184,11 +193,23 @@ class QuestionController extends GetxController
 
       // Then start it again
       // Once timer is finish go to the next qn
-      _animationController.forward().whenComplete(prevQuestion);
+      _animationController.forward().whenComplete(timerDone);
     }
   }
 
   void updateTheQnNum(int index) {
     _questionNumber.value = index + 1;
+  }
+
+  void timerDone() {
+    int j = 0;
+    while (j<questions.length) {
+      if(answerIndexes[questions[j].id] == questions[j].answer) {
+        _marksObtained += questions[j].mark;
+      }
+      _totalMarks += questions[j].mark;
+      j++;
+    }
+    Get.to(ScoreScreen());
   }
 }

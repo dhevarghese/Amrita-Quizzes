@@ -50,7 +50,7 @@ class WelcomeScreen extends StatelessWidget {
                       if (value.isEmpty || value.isBlank){
                         return Strings.invalidPasswordEmpty;
                       }else if(this.password.compareTo(value) != 0){
-                        return "Password is Incorrect";
+                        return Strings.incorrectPassword;
                       }
                     },
                     obscureText: true,

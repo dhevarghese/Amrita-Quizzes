@@ -22,15 +22,21 @@ pipeline {
             }
             post {
                 always {
-                    sh "sudo apt install python3-distutils -y"
-                    sh "python3 lcov_cobertura.py coverage/lcov.info --output coverage/coverage.xml"
-                    step([$class: 'CoberturaPublisher', coberturaReportFile: 'coverage/coverage.xml'])
+                    sh "genhtml coverage/lcov.info -o coverage/"
+                    publishHTML (target : [allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'coverage',
+                    reportFiles: 'index.html',
+                    reportName: 'My Reports',
+                    reportTitles: 'The Report'])
+                    echo "TESTING END"
                 }
             }
         }
         stage('Run Analyzer') {
             steps {
-                sh "dartanalyzer --options analysis_options.yaml ."
+                sh "flutter analyze"
             }
         }
     }

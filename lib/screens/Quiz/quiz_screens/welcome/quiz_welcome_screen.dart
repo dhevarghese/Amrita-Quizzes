@@ -1,9 +1,20 @@
 import 'package:amrita_quizzes/constants/color_constants.dart';
+import 'package:amrita_quizzes/models/Quiz.dart';
 import 'package:amrita_quizzes/screens/Quiz/quiz_screens/quiz/quiz_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class WelcomeScreen extends StatelessWidget {
+  WelcomeScreen({
+    Key key,
+    @required this.quizInfo,
+  }) : super(key: key);
+
+  final Quiz quizInfo;
+
+  final _formKey = GlobalKey<FormBuilderState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,6 +29,19 @@ class WelcomeScreen extends StatelessWidget {
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
                           colors: [Colors.purple, Colors.blue])))),
+          Positioned(
+            left: 25,
+            top: 50,
+            child: IconButton(
+                icon: SvgPicture.asset(
+                  'assets/icons/back.svg',
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop(context);
+                }
+            ),
+          ),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
@@ -32,19 +56,46 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   Text("Enter the quiz credentials below"),
                   Spacer(), // 1/6
-                  TextField(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Color(0x272041),
-                      hintText: "Password",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
+
+                  FormBuilder(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        FormBuilderTextField(name: "qPass",
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Color(0x272041),
+                            hintText: "Password",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                            )
+                          ),
+                          obscureText: true,
+                        ),
+                      ],
                     ),
                   ),
                   Spacer(), // 1/6
                   InkWell(
-                    onTap: () => Get.to(QuizScreen()),
+                    //onTap: () => Get.to(QuizScreen()),
+                    onTap: () {
+                      _formKey.currentState.save();
+                      final formData = _formKey.currentState.value;
+                      if(formData["qPass"] == quizInfo.password) {
+                        Get.to(QuizScreen());
+                      }
+                      else {
+                        print("wrong password");
+                        _formKey.currentState.reset();
+                        //FocusScope.of(context).unfocus();
+
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => _buildPopupDialog(context),
+                        );
+                      }
+
+                    },
                     child: Container(
                       width: double.infinity,
                       alignment: Alignment.center,
@@ -52,7 +103,6 @@ class WelcomeScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         gradient:  LinearGradient(
                           colors: [Color(0xFF46A0AE), Color(0xFF00FFCB)],
-                          //colors: [Color(0x1B1429), Color(0x1B1429)],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
                         ),
@@ -74,6 +124,28 @@ class WelcomeScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPopupDialog(BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Sorry!'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("Wrong Password"),
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Colors.white70,
+          child: const Text('Close'),
+        ),
+      ],
     );
   }
 }

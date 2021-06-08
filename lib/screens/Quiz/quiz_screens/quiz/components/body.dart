@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:amrita_quizzes/constants/color_constants.dart';
 import 'package:amrita_quizzes/controllers/question_controller.dart';
-import 'package:amrita_quizzes/models/Questions.dart';
-//import 'package:websafe_svg/websafe_svg.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'progress_bar.dart';
 import 'question_card.dart';

@@ -152,7 +152,8 @@ class TakeUpQuiz extends StatelessWidget {
                       showAlertDialog(context, "Too early!", "The alloted start time for this quiz has not yet come. Please be patient.");
                     }
                     else{
-                      Navigator.of(context).push(
+                      Navigator.push(
+                        context,
                         MaterialPageRoute(
                             builder: (BuildContext context) => QuizMain(quizInfo: quizInfo,)),
                       );

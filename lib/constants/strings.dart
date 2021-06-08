@@ -59,7 +59,7 @@ class Strings {
       'Received an activation link but you are already signed in.';
   static const String isNotSignInWithEmailLinkMessage =
       'Invalid activation link';
-
+  static const String incorrectPassword = 'Password is Incorrect';
   // Home page
   static const String homePage = 'Home Page';
 

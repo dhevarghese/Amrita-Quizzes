@@ -22,6 +22,7 @@ pipeline {
             }
             post {
                 always {
+                    sh "sudo apt install python3-distutils -y"
                     sh "python3 lcov_cobertura.py coverage/lcov.info --output coverage/coverage.xml"
                     step([$class: 'CoberturaPublisher', coberturaReportFile: 'coverage/coverage.xml'])
                 }

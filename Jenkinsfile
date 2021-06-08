@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh "flutter test --coverage"
+                sh "flutter test test/sign_in_page_test.dart"
             }
             post {
                 always {

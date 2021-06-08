@@ -4,6 +4,8 @@ import 'package:amrita_quizzes/models/Quiz.dart';
 import 'package:amrita_quizzes/screens/Quiz/quiz_screens/quiz/quiz_screen.dart';
 import 'package:amrita_quizzes/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -11,10 +13,11 @@ class WelcomeScreen extends StatelessWidget {
 
   final String password;
 
-   WelcomeScreen ({ Key key, this.password }): super(key: key);
+   WelcomeScreen ({ Key key, @required this.password }): super(key: key);
 
 
-  var _formKey = GlobalKey<FormState>();
+  final var _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +34,19 @@ class WelcomeScreen extends StatelessWidget {
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
                           colors: [Colors.purple, Colors.blue])))),
+          Positioned(
+            left: 25,
+            top: 50,
+            child: IconButton(
+                icon: SvgPicture.asset(
+                  'assets/icons/back.svg',
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop(context);
+                }
+            ),
+          ),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
@@ -45,6 +61,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   Text("Enter the quiz credentials below"),
                   Spacer(), // 1/6
+
                   TextFormField(
                     validator: (String value) {
                       if (value.isEmpty || value.isBlank){
@@ -69,11 +86,13 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   Spacer(), // 1/6
                   InkWell(
+
                     onTap: () {
                       if (_formKey.currentState.validate()){
                         Get.to(QuizScreen());
                       }
                       },
+
                     child: Container(
                       width: double.infinity,
                       alignment: Alignment.center,
@@ -81,7 +100,6 @@ class WelcomeScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         gradient:  LinearGradient(
                           colors: [Color(0xFF46A0AE), Color(0xFF00FFCB)],
-                          //colors: [Color(0x1B1429), Color(0x1B1429)],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
                         ),
@@ -104,6 +122,28 @@ class WelcomeScreen extends StatelessWidget {
         ],
       ),
       ),
+    );
+  }
+
+  Widget _buildPopupDialog(BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Sorry!'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("Wrong Password"),
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Colors.white70,
+          child: const Text('Close'),
+        ),
+      ],
     );
   }
 }

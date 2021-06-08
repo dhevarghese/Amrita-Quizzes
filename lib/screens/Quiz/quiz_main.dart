@@ -33,7 +33,9 @@ class QuizMain extends StatelessWidget {
       theme: ThemeData.dark(),
       home:  Provider<Quiz>(
         create: (_) => quizInfo,
+
         child: WelcomeScreen (password: quizInfo.password),
+
       ),
     );
   }

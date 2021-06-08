@@ -38,7 +38,6 @@ class WelcomeScreen extends StatelessWidget {
                   color: Colors.white,
                 ),
                 onPressed: () {
-                  int count = 0;
                   Navigator.of(context, rootNavigator: true).pop(context);
                 }
             ),

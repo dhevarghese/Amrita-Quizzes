@@ -16,7 +16,7 @@ class WelcomeScreen extends StatelessWidget {
    WelcomeScreen ({ Key key, @required this.password }): super(key: key);
 
 
-  final var _formKey = GlobalKey<FormState>();
+  var _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {

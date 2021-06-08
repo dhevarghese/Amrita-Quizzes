@@ -1,14 +1,27 @@
 import 'package:amrita_quizzes/constants/color_constants.dart';
+import 'package:amrita_quizzes/constants/strings.dart';
+import 'package:amrita_quizzes/models/Quiz.dart';
 import 'package:amrita_quizzes/screens/Quiz/quiz_screens/quiz/quiz_screen.dart';
+import 'package:amrita_quizzes/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class WelcomeScreen extends StatelessWidget {
+
+  final String password;
+
+   WelcomeScreen ({ Key key, this.password }): super(key: key);
+
+
+  var _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       //backgroundColor: ,
-      body: Stack(
+      body: Form(
+        key: _formKey,
+        child: Stack(
         children: [
           //SvgPicture.asset("assets/icons/bg.svg", fit: BoxFit.fill),
           Center(
@@ -32,10 +45,22 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   Text("Enter the quiz credentials below"),
                   Spacer(), // 1/6
-                  TextField(
+                  TextFormField(
+                    validator: (String value) {
+                      if (value.isEmpty || value.isBlank){
+                        return Strings.invalidPasswordEmpty;
+                      }else if(this.password.compareTo(value) != 0){
+                        return "Password is Incorrect";
+                      }
+                    },
+                    obscureText: true,
                     decoration: InputDecoration(
-                      filled: true,
+                      //filled: true,
                       fillColor: Color(0x272041),
+                      errorStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15.0
+                      ),
                       hintText: "Password",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -44,7 +69,11 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   Spacer(), // 1/6
                   InkWell(
-                    onTap: () => Get.to(QuizScreen()),
+                    onTap: () {
+                      if (_formKey.currentState.validate()){
+                        Get.to(QuizScreen());
+                      }
+                      },
                     child: Container(
                       width: double.infinity,
                       alignment: Alignment.center,
@@ -73,6 +102,7 @@ class WelcomeScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
       ),
     );
   }

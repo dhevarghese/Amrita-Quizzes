@@ -20,6 +20,7 @@ class Body extends StatelessWidget {
     questionList.clear();
     answerIndexes.clear();
     quizDuration = quizInfo.duration;
+    quizId = quizInfo.id;
     for (var i in quizInfo.questions) {
       questionList.add(i);
     }

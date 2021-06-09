@@ -10,7 +10,15 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Report"),),
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: Colors.white
+        ),
+        title: Text("Report", style: TextStyle(
+            color: Colors.white
+          ),
+        ),
+      ),
       body: ContactUsBody(),
       resizeToAvoidBottomInset: false,
     );

@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:image_picker/image_picker.dart';
@@ -111,7 +112,9 @@ class _ContactUsBodyState extends State<ContactUsBody> {
                     alignment: Alignment.center,
                     width: 100.0,
                     height: 40.0,
-                    child: Text("Submit"),
+                    child: Text("Submit", style: TextStyle(
+                        color: Colors.white
+                    ),),
                   ))
             ],
           ),

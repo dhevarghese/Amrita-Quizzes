@@ -1,3 +1,4 @@
+
 import 'package:amrita_quizzes/models/Questions.dart';
 import 'package:amrita_quizzes/models/Quiz.dart';
 import 'package:amrita_quizzes/models/QuizUser.dart';
@@ -205,7 +206,7 @@ class DatabaseService implements Database {
   }
 
   Future<void> updateQuiz(String quizId, [Map updateData, List qTakers]) async {
-    Map keyMap = {'qName': 'title', 'qDesc' : 'description', 'qPass': 'password', 'qMarks': 'marks',  'qCategory': 'category', 'qStartDate' : 'startTime', 'qEndDate' : 'endTime', 'qDuration': 'duration'};
+    Map keyMap = {'qName': 'title', 'qDesc' : 'description', 'qPass': 'password', 'qMarks': 'marks',  'qCategory': 'category', 'qStartDate' : 'startTime', 'qEndDate' : 'endTime', 'qDuration': 'duration', 'qNav': 'nav', 'qPubScore': 'pubScore'};
     updateData.forEach((key, value) async {
       if(value != null && value != ""){
         if(keyMap[key] == "marks"){

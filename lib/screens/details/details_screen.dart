@@ -1,5 +1,6 @@
 import 'package:amrita_quizzes/constants/color_constants.dart';
 import 'package:amrita_quizzes/models/Quiz.dart';
+import 'package:amrita_quizzes/screens/contactus/contactus_screen.dart';
 import 'package:amrita_quizzes/screens/details/components/body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -31,6 +32,16 @@ class DetailsScreen extends StatelessWidget {
         onPressed: () => Navigator.pop(context),
       ),
       actions: <Widget>[
+        IconButton(
+            icon: Icon(Icons.call, color: Colors.white,),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => ContactUsScreen()),
+              );
+            }
+        ),
         SizedBox(width: kDefaultPaddin / 2)
       ],
     );

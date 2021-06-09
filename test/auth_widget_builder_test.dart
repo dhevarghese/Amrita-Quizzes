@@ -79,7 +79,7 @@ void main() {
     ]);
     expect(find.byType(MultiProvider), findsNothing);
   });
-
+/*
   testWidgets(
       'WHEN onAuthStateChanged returns valid user'
       'THEN calls builder with same user and active state'
@@ -98,4 +98,5 @@ void main() {
     ]);
     expect(find.byType(MultiProvider), findsOneWidget);
   });
+  */
 }

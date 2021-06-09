@@ -4,6 +4,7 @@ import 'package:amrita_quizzes/models/Quiz.dart';
 import'package:amrita_quizzes/screens/Quiz/quiz_main.dart';
 import 'package:amrita_quizzes/screens/addquiz/add_questions_screen.dart';
 import 'package:amrita_quizzes/screens/addquiz/add_quiz_screen.dart';
+import 'package:amrita_quizzes/screens/details/components/qr_generator.dart';
 import 'package:amrita_quizzes/screens/home/home_screen.dart';
 import 'package:amrita_quizzes/services/database_service.dart';
 import 'package:flutter/material.dart';
@@ -133,7 +134,12 @@ class TakeUpQuiz extends StatelessWidget {
                   "assets/icons/qr.svg",
                   color: Color(int.parse('0x'+quizInfo.color)),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>GenerateScreen(quizinfo: quizInfo)),
+                  );
+                },
               ),
             ),
           Expanded(

@@ -151,7 +151,23 @@ class QuestionController extends GetxController
     }
 
     if (_questionNumber.value != _questions.length) {
-      _isAnswered = false;
+
+      if(answerIndexes[questionNumber.value+1] < 0) {
+        _isAnswered = false;
+      }
+
+      else {
+        print("next quest is answered");
+        _isAnswered = true;
+        _selectedAns = answerIndexes[questionNumber.value+1];
+      }
+      print("next ques fun");
+      print(questionNumber.value);
+
+      //_isAnswered = false;
+
+
+
       _pageController.nextPage(
           duration: Duration(milliseconds: 250), curve: Curves.ease);
 
@@ -184,8 +200,19 @@ class QuestionController extends GetxController
   }
 
   void prevQuestion() {
-    if (_questionNumber.value > 0) {
-      _isAnswered = false;
+    if (_questionNumber.value  > 0) {
+
+      if(answerIndexes[questionNumber.value-1] < 0) {
+        // print("prev question is unanswered");
+        _isAnswered = false;
+      }
+
+      else {
+        print("prev quest is answered");
+        _isAnswered = true;
+        _selectedAns = answerIndexes[questionNumber.value-1];
+      }
+
       _pageController.previousPage(
           duration: Duration(milliseconds: 250), curve: Curves.ease);
 

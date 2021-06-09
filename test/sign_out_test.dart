@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:amrita_quizzes/app/sign_in/sign_in_page.dart';
+import 'package:amrita_quizzes/app/home_page.dart';
 import 'package:amrita_quizzes/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,12 +8,12 @@ import 'package:provider/provider.dart';
 import 'mocks.dart';
 
 void main() {
-  MockAuthService mockAuthService;
+  MyAppUser myApp;
   MockNavigatorObserver mockNavigatorObserver;
   StreamController<MyAppUser> onAuthStateChangedController;
 
   setUp(() {
-    mockAuthService = MockAuthService();
+    myApp = MyAppUser(uid: '');
     mockNavigatorObserver = MockNavigatorObserver();
     onAuthStateChangedController = StreamController<MyAppUser>();
   });
@@ -23,24 +23,16 @@ void main() {
   });
 
 
-  void stubOnAuthStateChangedYields(Iterable<MyAppUser> onAuthStateChanged) {
-    onAuthStateChangedController
-        .addStream(Stream<MyAppUser>.fromIterable(onAuthStateChanged));
-    when(mockAuthService.onAuthStateChanged).thenAnswer((_) {
-      return onAuthStateChangedController.stream;
-    });
-  }
-
-  Future<void> pumpSignInPage(WidgetTester tester) async {
+  Future<void> pumpHomePage(WidgetTester tester) async {
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          Provider<AuthService>(
-            create: (_) => mockAuthService,
+          Provider<MyAppUser>(
+            create: (_) => myApp,
           ),
         ],
         child: MaterialApp(
-          home: SignInPageBuilder(),
+          home: HomePage(),
           navigatorObservers: [mockNavigatorObserver],
         ),
       ),
@@ -49,15 +41,13 @@ void main() {
     verify(mockNavigatorObserver.didPush(any, any)).called(1);
   }
 
-  testWidgets('email & password navigation', (WidgetTester tester) async {
-    await pumpSignInPage(tester);
-
-    final emailPasswordButton = find.byKey(SignInPage.emailPasswordButtonKey);
-    expect(emailPasswordButton, findsOneWidget);
-
-    await tester.tap(emailPasswordButton);
+  testWidgets('Sign Out Button Test', (WidgetTester tester) async {
+    await pumpHomePage(tester);
+    // ignore: deprecated_member_use
+    final SignOutButton = find.byType(FlatButton);
+    expect(SignOutButton, findsOneWidget);
+    await tester.tap(SignOutButton);
     await tester.pumpAndSettle();
-
     verify(mockNavigatorObserver.didPush(any, any)).called(1);
   });
 }

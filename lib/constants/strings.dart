@@ -43,7 +43,7 @@ class Strings {
   static const String invalidEmailEmpty = 'Email can\'t be empty';
   static const String invalidPasswordTooShort = 'Password is too short';
   static const String invalidPasswordEmpty = 'Password can\'t be empty';
-
+  static const String incorrectPassword = 'Password is incorrect';
   // Email link page
   static const String submitEmailAddressLink =
       'Submit your email address to receive an activation link.';

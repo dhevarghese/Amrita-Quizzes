@@ -19,14 +19,14 @@ class GenerateScreen extends StatefulWidget {
 
 class GenerateScreenState extends State<GenerateScreen> {
 
-  static const double _topSectionTopPadding = 50.0;
-  static const double _topSectionBottomPadding = 20.0;
-  static const double _topSectionHeight = 50.0;
+  //static const double _topSectionTopPadding = 50.0;
+  //static const double _topSectionBottomPadding = 20.0;
+  //static const double _topSectionHeight = 50.0;
 
   GlobalKey globalKey = new GlobalKey();
   String _dataString = "widget.displayText";
-  String _inputErrorText;
-  final TextEditingController _textController =  TextEditingController();
+  //String _inputErrorText;
+  //final TextEditingController _textController =  TextEditingController();
 
   @override
   Widget build(BuildContext context) {

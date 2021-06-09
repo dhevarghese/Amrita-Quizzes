@@ -69,6 +69,9 @@ class WelcomeScreen extends StatelessWidget {
                       }else if(this.password.compareTo(value) != 0){
                         return Strings.incorrectPassword;
                       }
+                      else {
+                        return null;
+                      }
                     },
                     obscureText: true,
                     decoration: InputDecoration(

@@ -149,7 +149,7 @@ class TakeUpQuiz extends StatelessWidget {
                       showAlertDialog(context, "Missed it!", "It's past the end time of the quiz. You can no longer take it up.");
                     }
                     else if(quizInfo.startTime.isAfter(DateTime.now())){
-                      showAlertDialog(context, "Too early!", "The alloted start time for this quiz has not yet come. Please be patient.");
+                      showAlertDialog(context, "Too early!", "The allotted start time for this quiz has not yet come. Please be patient.");
                     }
                     else{
                       Navigator.push(

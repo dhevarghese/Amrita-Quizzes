@@ -10,6 +10,7 @@ class Quiz {
   final DateTime startTime, endTime;
   final int marks;
   final double numQuestions;
+  bool nav, pubScore;
   File image;
   List<Question> questions = [];
   List takers;
@@ -29,6 +30,8 @@ class Quiz {
     @required this.id,
     @required this.image,
     @required this.color,
+    @required this.nav,
+    @required this.pubScore,
     this.takers = const [],
   });
 
@@ -55,24 +58,28 @@ class Quiz {
         'marks': marks,
         'id': id,
         'color': color,
+        'nav': nav,
+        'pubScore': pubScore,
         'takers':takers
       };
 
   Quiz.fromJson(Map parsedJson) :
-    title = parsedJson['title'] ?? '',
-    description = parsedJson['description'] ?? '',
-    password = parsedJson['password'] ?? '',
-    creator = parsedJson['creator'] ?? '',
-    category = parsedJson['category'] ?? '',
-    startTime = parsedJson['startTime'],
-    endTime = parsedJson['endTime'],
-    duration = parsedJson['duration'],
-    numQuestions = parsedJson['numQuestions'],
-    marks = parsedJson['marks'],
-    id = parsedJson['id'] ?? '', // the doc ID, helpful to have
-    takers = parsedJson['takers'] ?? [],
-    imageLink = parsedJson['image'] ?? '',
-    color = parsedJson['color'] ?? '';
+        title = parsedJson['title'] ?? '',
+        description = parsedJson['description'] ?? '',
+        password = parsedJson['password'] ?? '',
+        creator = parsedJson['creator'] ?? '',
+        category = parsedJson['category'] ?? '',
+        startTime = parsedJson['startTime'],
+        endTime = parsedJson['endTime'],
+        duration = parsedJson['duration'],
+        numQuestions = parsedJson['numQuestions'],
+        marks = parsedJson['marks'],
+        id = parsedJson['id'] ?? '', // the doc ID, helpful to have
+        takers = parsedJson['takers'] ?? [],
+        imageLink = parsedJson['image'] ?? '',
+        nav= parsedJson['nav'] ?? false,
+        pubScore= parsedJson['pubScore'] ?? false,
+        color = parsedJson['color'] ?? '';
 
   @override
   String toString(){

@@ -65,3 +65,4 @@ const List sample_data = [
 List<Question> questionList = [];
 LinkedHashMap answerIndexes = new LinkedHashMap<int, int>();
 String quizDuration = "";
+String quizId ="";

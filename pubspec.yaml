@@ -45,12 +45,14 @@ dependencies:
   dropdown_search: ^0.6.1
   flutter_search_bar: ^2.1.0
   equatable: ^2.0.0
+  image_picker: any
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.1
   flutter_svg: ^0.20.0-nullsafety.3
   get: ^3.24.0
+  flutter_mailer: ^2.0.0
 
   qr_code_scanner:
     git:

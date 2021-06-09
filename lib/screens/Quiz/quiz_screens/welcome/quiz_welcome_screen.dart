@@ -1,12 +1,9 @@
 import 'package:amrita_quizzes/constants/color_constants.dart';
 import 'package:amrita_quizzes/constants/strings.dart';
 import 'package:amrita_quizzes/screens/Quiz/quiz_screens/quiz/quiz_screen.dart';
-import 'package:amrita_quizzes/services/database_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class WelcomeScreen extends StatelessWidget {
 

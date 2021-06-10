@@ -283,19 +283,29 @@ class DatabaseService implements Database {
 
   Future<Map> getQuizScores(Quiz q) async {
     Map scoresData = new Map();
+    int takersNA = 0;
     for(var user in q.takers){
       var dbUsers = await userCollection.where('name', isEqualTo: user).get();
       for(var dbUser in dbUsers.docs){
         await userCollection.doc(dbUser.id).get().then((ds){
           if(ds.data()['quizzes_taken'] != null){
             scoresData[user] =  ds.data()['quizzes_taken'][q.id];
+            if(ds.data()['quizzes_taken'][q.id] == null){
+              takersNA+=1;
+            }
           }
           else{
             scoresData[user] = null;
+            takersNA +=1;
           }
         });
       }
     }
+    await quizCollection.doc(q.id).get().then((ds){
+      scoresData["total_Score"] = ds["total_Score"];
+      scoresData["takers_Count"] = ds["takers_Count"];
+    });
+    scoresData["NAC"] = takersNA;
     return scoresData;
   }
 }

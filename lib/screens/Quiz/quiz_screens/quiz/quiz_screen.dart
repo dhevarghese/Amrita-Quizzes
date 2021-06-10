@@ -22,7 +22,7 @@ class _QuizScreenState extends State<QuizScreen> {
   bool alreadyShown = false;
 
   void showNotif() {
-    if(((int.parse(quizDuration) - ((_controller.animation.value)*double.parse(quizDuration))) / int.parse(quizDuration)) < 0.98) {
+    if(((int.parse(quizDuration) - ((_controller.animation.value)*double.parse(quizDuration))) / int.parse(quizDuration)) < 0.25) {
       AlertController.show("Time's almost up", "You have ${(int.parse(quizDuration) - ((_controller.animation.value)*double.parse(quizDuration))).toStringAsFixed(2)} minutes left!", TypeAlert.warning);
       alreadyShown = true;
     }

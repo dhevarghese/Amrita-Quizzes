@@ -6,6 +6,7 @@ import 'package:amrita_quizzes/screens/addquiz/add_questions_screen.dart';
 import 'package:amrita_quizzes/screens/addquiz/add_quiz_screen.dart';
 import 'package:amrita_quizzes/screens/details/components/qr_generator.dart';
 import 'package:amrita_quizzes/screens/home/home_screen.dart';
+import 'package:amrita_quizzes/screens/scores/scores_screen.dart';
 import 'package:amrita_quizzes/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -164,6 +165,13 @@ class TakeUpQuiz extends StatelessWidget {
                             builder: (BuildContext context) => QuizMain(quizInfo: quizInfo,)),
                       );
                     }
+                  if(mode==0 && displayText.contains("View Scores"))
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ScoresScreen(quiz_info: quizInfo,),
+                        )
+                    );
                   if(mode==0 && displayText.contains("Edit Quiz"))
                     Navigator.push(
                         context,

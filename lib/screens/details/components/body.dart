@@ -20,6 +20,7 @@ class Body extends StatelessWidget {
     questionList.clear();
     answerIndexes.clear();
     quizDuration = quizInfo.duration;
+    quizName = quizInfo.title;
     quizId = quizInfo.id;
     for (var i in quizInfo.questions) {
       questionList.add(i);
@@ -58,6 +59,8 @@ class Body extends StatelessWidget {
                       SizedBox(height: kDefaultPaddin / 2),
                       if(mode==1)
                         TakeUpQuiz(quizInfo: quizInfo, displayText: "Take up quiz", mode:mode),
+                      if(mode==0)
+                        TakeUpQuiz(quizInfo:quizInfo, displayText: "View Scores", mode:mode),
                       if(mode==0)
                         TakeUpQuiz(quizInfo:quizInfo, displayText: "Edit Quiz", mode:mode),
                       if(mode==0)

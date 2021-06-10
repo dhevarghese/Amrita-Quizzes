@@ -22,6 +22,8 @@ class Body extends StatelessWidget {
     quizDuration = quizInfo.duration;
     quizName = quizInfo.title;
     quizId = quizInfo.id;
+    nav = quizInfo.nav;
+    pubScore = quizInfo.pubScore;
     for (var i in quizInfo.questions) {
       questionList.add(i);
     }

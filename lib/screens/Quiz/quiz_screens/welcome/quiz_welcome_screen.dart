@@ -30,7 +30,7 @@ class WelcomeScreen extends StatelessWidget {
                           end: Alignment.centerRight,
                           colors: [Colors.purple, Colors.blue])))),
           Positioned(
-            left: 25,
+            left: 5,
             top: 50,
             child: IconButton(
                 icon: SvgPicture.asset(

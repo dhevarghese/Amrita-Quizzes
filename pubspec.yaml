@@ -44,6 +44,7 @@ dependencies:
   rounded_loading_button: ^2.0.3
   dropdown_search: ^0.6.1
   flutter_search_bar: ^2.1.0
+  flutter_dropdown_alert: ^1.0.2
   equatable: ^2.0.0
   image_picker: any
 

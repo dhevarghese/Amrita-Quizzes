@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
+
 class ProgressBar extends StatelessWidget {
   const ProgressBar({
     Key key,
@@ -50,6 +51,7 @@ class ProgressBar extends StatelessWidget {
                   ),
                 ),
               ),
+
             ],
           );
         },

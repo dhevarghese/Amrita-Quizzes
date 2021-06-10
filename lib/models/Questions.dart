@@ -67,3 +67,5 @@ LinkedHashMap answerIndexes = new LinkedHashMap<int, int>();
 String quizDuration = "";
 String quizId ="";
 String quizName ="";
+bool nav = true;
+bool pubScore = true;

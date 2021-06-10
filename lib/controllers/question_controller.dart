@@ -200,7 +200,7 @@ class QuestionController extends GetxController
   }
 
   void prevQuestion() {
-    if (_questionNumber.value  > 0) {
+    if (_questionNumber.value  > 0 && nav==true) {
 
       if(answerIndexes[questionNumber.value-1] < 0) {
         // print("prev question is unanswered");

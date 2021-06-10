@@ -45,14 +45,18 @@ class ScoreScreen extends StatelessWidget {
 
               Spacer(flex: 3),
               Text(
-                "Score",
+                getStringScore(),
+                style: getTestStyle(context),
+              ),
+              Text(
+                " ",
                 style: Theme
                     .of(context)
                     .textTheme
-                    .headline3
+                    .headline6
                     .copyWith(color: Colors.white),
               ),
-              Spacer(),
+              //Spacer(),
               updateAndShow(dbs),
               Spacer(flex: 3),
             ],
@@ -61,6 +65,33 @@ class ScoreScreen extends StatelessWidget {
       ),
     );
   }
+
+  TextStyle getTestStyle(BuildContext context) {
+    if (pubScore == false) {
+      return Theme.of(context).textTheme.headline5.copyWith(color: Colors.white);
+    }
+    else {
+      return Theme.of(context).textTheme.headline3.copyWith(color: Colors.white);
+    }
+  }
+  String getString() {
+    if (pubScore == false) {
+      return "";
+    }
+    else {
+      QuestionController _qnController = Get.put(QuestionController());
+      return "${_qnController.marksObtained}/${_qnController.totalMarks}";
+    }
+  }
+  String getStringScore() {
+    if (pubScore == false) {
+      return "Scores will be published soon!";
+    }
+    else {
+      return "Score:";
+    }
+  }
+
 
   Widget updateAndShow(Database dbs) {
     return FutureBuilder<void> (
@@ -71,12 +102,12 @@ class ScoreScreen extends StatelessWidget {
           }
           else {
             return Text(
-                "${_qnController.marksObtained}/${_qnController.totalMarks}",
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline4
-                    .copyWith(color: Colors.white),
+              getString(),
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline4
+                  .copyWith(color: Colors.white),
             );
           }
         }

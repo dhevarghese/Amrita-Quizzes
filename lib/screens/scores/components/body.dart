@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class Body extends StatefulWidget {
   final Map scoresData;
-  Body(this.scoresData, {Key key}) : super(key: key);
+  final Map moreScoreData;
+  Body(this.scoresData, this.moreScoreData, {Key key}) : super(key: key);
 
   _BodyState createState() => _BodyState();
 }
@@ -44,6 +45,38 @@ class _BodyState extends State<Body> {
                   title: Padding(
                     padding: EdgeInsets.all(16.0),
                     child: Text("NA Students have not yet attempted the Quiz! ", style: TextStyle(color: Colors.redAccent),),
+                  ),
+                )
+            ),
+            Card(
+                margin: EdgeInsets.fromLTRB(16.0,16,16,0),
+                shadowColor: Colors.lightBlueAccent,
+                child: ListTile(
+                  leading: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Icon(Icons.elevator,
+                        color: Colors.lightBlueAccent
+                    ),
+                  ),
+                  title: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(widget.moreScoreData["NAC"].toString() + " out of " + widget.scoresData.length.toString() + " invited have taken the quiz", style: TextStyle(color: Colors.lightBlueAccent),),
+                  ),
+                )
+            ),
+            Card(
+                margin: EdgeInsets.fromLTRB(16.0,16,16,0),
+                shadowColor: Colors.greenAccent,
+                child: ListTile(
+                  leading: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Icon(Icons.bubble_chart,
+                        color: Colors.greenAccent
+                    ),
+                  ),
+                  title: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text("The average score is " + (widget.moreScoreData["total_Score"]/widget.moreScoreData["takers_Count"]).toString(), style: TextStyle(color: Colors.greenAccent),),
                   ),
                 )
             ),

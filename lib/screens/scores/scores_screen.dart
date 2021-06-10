@@ -33,8 +33,12 @@ class _ScoresScreenState extends State<ScoresScreen> {
               }
               else {
                 Map data = userSnapshot.data;
-                print(data);
-                return Body(data);
+                Map moreScoreDetails = new Map();
+                moreScoreDetails["total_Score"] = data["total_Score"];
+                moreScoreDetails["takers_Count"] = data["takers_Count"];
+                moreScoreDetails["NAC"] = data["NAC"];
+                data.removeWhere((key, value) => (key == "total_Score") || (key == "takers_Count") || (key == "NAC"));
+                return Body(data, moreScoreDetails);
               }
             }
         )

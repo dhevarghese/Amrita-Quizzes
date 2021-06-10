@@ -1,12 +1,16 @@
 import 'package:amrita_quizzes/controllers/question_controller.dart';
+import 'package:amrita_quizzes/models/Questions.dart';
+import 'package:amrita_quizzes/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class ScoreScreen extends StatelessWidget {
+  QuestionController _qnController = Get.put(QuestionController());
   @override
   Widget build(BuildContext context) {
-    QuestionController _qnController = Get.put(QuestionController());
+    final dbs = Provider.of<Database>(context);
     return Scaffold(
       //appBar: buildAppBar(context),
       body: Stack(
@@ -49,19 +53,33 @@ class ScoreScreen extends StatelessWidget {
                     .copyWith(color: Colors.white),
               ),
               Spacer(),
-              Text(
+              updateAndShow(dbs),
+              Spacer(flex: 3),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget updateAndShow(Database dbs) {
+    return FutureBuilder<void> (
+        future: dbs.uploadQuizScore(quizId, quizName, _qnController.marksObtained, _qnController.totalMarks, _qnController.numOfCorrectAns, answerIndexes),
+        builder: (context, snapshot) {
+          if(!snapshot.hasData){
+            return CircularProgressIndicator();
+          }
+          else {
+            return Text(
                 "${_qnController.marksObtained}/${_qnController.totalMarks}",
                 style: Theme
                     .of(context)
                     .textTheme
                     .headline4
                     .copyWith(color: Colors.white),
-              ),
-              Spacer(flex: 3),
-            ],
-          )
-        ],
-      ),
+            );
+          }
+        }
     );
   }
 }

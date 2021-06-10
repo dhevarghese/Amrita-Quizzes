@@ -81,7 +81,7 @@ class _BodyState extends State<Body> {
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
-            title: Text('${quizzes.keys.elementAt(index)}'),
+            title: Text('${quizzes.values.elementAt(index)[3]}'),
             trailing: Text('${quizzes.values.elementAt(index)[0]} / ${quizzes.values.elementAt(index)[1]}'),
             /*trailing: RichText(
               text: TextSpan(

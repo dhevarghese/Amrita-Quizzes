@@ -71,31 +71,39 @@ class _BodyState extends State<Body> {
     return ListView.builder(
       itemCount: quizzes.length,
       itemBuilder: (context, index) {
-        return Card(
-          child: ListTile(
-            //tileColor: Colors.lightBlue[50],
-            tileColor: (quizzes.values.elementAt(index)[0] /quizzes.values.elementAt(index)[1] > 0.80) ? Colors.greenAccent : (quizzes.values.elementAt(index)[0] /quizzes.values.elementAt(index)[1] > 0.50) ? Colors.amber[400] : Colors.redAccent,
-            onTap: (){
-              final snackBar = SnackBar(
-                content: Text('More details will be available soon!'),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-            title: Text('${quizzes.keys.elementAt(index)}'),
-            trailing: Text('${quizzes.values.elementAt(index)[0]} / ${quizzes.values.elementAt(index)[1]}'),
-            /*trailing: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(text: '${quizzes.values.elementAt(index)[0]} / ${quizzes.values.elementAt(index)[1]}', style: TextStyle(color: Colors.black)),
-                  WidgetSpan(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                      child: Icon(Icons.arrow_forward_ios, color: Colors.white,),
-                    ),
-                  ),
-                ],
+        return GestureDetector(
+          onTap: (){
+            final snackBar = SnackBar(
+              content: Text('More details will be available soon!'),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          },
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+            child: Card(
+              //color: Colors.lightBlue[50],
+              color: (quizzes.values.elementAt(index)[5]) ? (quizzes.values.elementAt(index)[0] /quizzes.values.elementAt(index)[1] > 0.80) ? Colors.greenAccent : (quizzes.values.elementAt(index)[0] /quizzes.values.elementAt(index)[1] > 0.50) ? Colors.amber[400] : Colors.redAccent : Colors.lightBlueAccent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
               ),
-            ),*/
+              child: ListTile(
+                title: Text('${quizzes.values.elementAt(index)[3]}', style: TextStyle(color: Colors.white),),
+                trailing: Text((quizzes.values.elementAt(index)[5]) ? '${quizzes.values.elementAt(index)[0]} / ${quizzes.values.elementAt(index)[1]}' : "Not Published", style: TextStyle(color: Colors.white),),
+                /*trailing: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(text: '${quizzes.values.elementAt(index)[0]} / ${quizzes.values.elementAt(index)[1]}', style: TextStyle(color: Colors.black)),
+                      WidgetSpan(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                          child: Icon(Icons.arrow_forward_ios, color: Colors.white,),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),*/
+              ),
+            ),
           ),
         );
       },

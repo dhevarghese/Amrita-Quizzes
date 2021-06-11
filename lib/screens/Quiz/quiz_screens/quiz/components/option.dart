@@ -1,5 +1,6 @@
 import 'package:amrita_quizzes/constants/color_constants.dart';
 import 'package:amrita_quizzes/controllers/question_controller.dart';
+import 'package:amrita_quizzes/models/Questions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
@@ -21,8 +22,10 @@ class Option extends StatelessWidget {
         builder: (qnController) {
           Color getTheRightColor() {
             if (qnController.isAnswered) {
-              if (index == qnController.correctAns) {
-                //return kGreenColor;
+              //print("answered");
+              if (index == answerIndexes[qnController.questionNumber.value-1]) {
+                //print("index ansindex");
+                //return Colors.lightBlueAccent;
               } if (index == qnController.selectedAns ) {
                 return Colors.lightBlueAccent;
               }
@@ -47,9 +50,11 @@ class Option extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "${index + 1}. $text",
-                    style: TextStyle(color: getTheRightColor(), fontSize: 16),
+                  Expanded(
+                    child: Text(
+                      "${index + 1}. $text",
+                      style: TextStyle(color: getTheRightColor(), fontSize: 16),
+                    ),
                   ),
                   Container(
                     height: 26,

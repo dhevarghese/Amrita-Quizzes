@@ -122,7 +122,26 @@ class _AddQuizScreenState extends State<AddQuizScreen> {
                       _textField(context, 'qCategory', 'Category', 'CSE', 1, false, TextInputType.text, Icons.category, addMode),
                       if(addMode)
                         _textField(context, 'numQ', 'Number of Questions', '5', 1, false, TextInputType.number, Icons.question_answer, addMode),
-                      SizedBox(height: 10,),
+                      FormBuilderSwitch(
+                        name: 'qNav',
+                        title: Text("Allow Navigation", style: TextStyle(fontSize: 15),),
+                        initialValue: addMode ? false : widget.quizInfo.nav,
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.assistant_navigation, color: Colors.lightBlueAccent,),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                      Divider(),
+                      FormBuilderSwitch(
+                        name: 'qPubScore',
+                        title: Text("Publish Scores", style: TextStyle(fontSize: 15),),
+                        initialValue: addMode ? false : widget.quizInfo.pubScore,
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.score, color: Colors.lightBlueAccent,),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                      SizedBox(height: 15,),
                       DropdownSearch<String>(
                           mode: Mode.MENU,
                           showSelectedItem: true,
@@ -293,7 +312,7 @@ class _AddQuizScreenState extends State<AddQuizScreen> {
                         print(formData);
                         dbs.getUserName().then((value){
                           String hexString = formData['qColor'].substring(formData['qColor'].indexOf('x')+1,formData['qColor'].length-1);
-                          final newQuiz = Quiz(title: formData['qName'], description: formData['qDesc'], password: formData['qPass'], creator: value, category: formData['qCategory'], startTime: formData['qStartDate'], endTime: formData['qEndDate'], duration: formData['qDuration'], numQuestions: double.parse(formData['numQ']), marks: int.parse(formData['qMarks']), id: numQuizzes.toString(), color: hexString, image: formData['qImage'][0], takers: takersField.keys.toList());
+                          final newQuiz = Quiz(title: formData['qName'], description: formData['qDesc'], password: formData['qPass'], creator: value, category: formData['qCategory'], startTime: formData['qStartDate'], endTime: formData['qEndDate'], duration: formData['qDuration'], numQuestions: double.parse(formData['numQ']), marks: int.parse(formData['qMarks']), id: numQuizzes.toString(), color: hexString, image: formData['qImage'][0], takers: takersField.keys.toList(), nav: formData['qNav'], pubScore: formData['qPubScore']);
                           print(newQuiz.toString());
                           //_node.dispose();
                           Navigator.push(

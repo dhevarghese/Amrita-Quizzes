@@ -175,6 +175,7 @@ class _QuestionsState extends State<AddQuestions>{
   Widget build(BuildContext context) {
     final dbs = Provider.of<Database>(context);
     final user = Provider.of<MyAppUser>(context);
+    final bool addMode = widget.mQuiz.questions.isEmpty;
     return Scaffold(
       //backgroundColor: Colors.cyan[50],
       appBar: AppBar(
@@ -253,7 +254,7 @@ class _QuestionsState extends State<AddQuestions>{
                                 widget.mQuiz.addQuestions(ques);
                               }
                               print(widget.mQuiz.toString());
-                              showProgressDialog(context,dbs, user.uid, (widget.mQuiz.questions.isEmpty));
+                              showProgressDialog(context,dbs, user.uid, addMode);
                             }
                             else{
                               showAlertDialog(context, "Stop right there!", "Please fill all the necessary details for each question.");

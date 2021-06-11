@@ -45,7 +45,7 @@ class ProgressBar extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("${(int.parse(quizDuration) - ((controller.animation.value)*double.parse(quizDuration))).toStringAsFixed(2)} min left"),
+                      Text("${(int.parse(quizDuration) - ((controller.animation.value)*double.parse(quizDuration))).floor()} min ${60 -((((controller.animation.value)-(controller.animation.value.floor()))*60).round())} seconds left"),
                       SvgPicture.asset("assets/icons/clock.svg"),
                     ],
                   ),

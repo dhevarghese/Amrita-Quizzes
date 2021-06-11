@@ -4,7 +4,9 @@ import 'package:amrita_quizzes/models/Quiz.dart';
 import'package:amrita_quizzes/screens/Quiz/quiz_main.dart';
 import 'package:amrita_quizzes/screens/addquiz/add_questions_screen.dart';
 import 'package:amrita_quizzes/screens/addquiz/add_quiz_screen.dart';
+import 'package:amrita_quizzes/screens/details/components/qr_generator.dart';
 import 'package:amrita_quizzes/screens/home/home_screen.dart';
+import 'package:amrita_quizzes/screens/scores/scores_screen.dart';
 import 'package:amrita_quizzes/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -133,7 +135,12 @@ class TakeUpQuiz extends StatelessWidget {
                   "assets/icons/qr.svg",
                   color: Color(int.parse('0x'+quizInfo.color)),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>GenerateScreen(quizinfo: quizInfo)),
+                  );
+                },
               ),
             ),
           Expanded(
@@ -143,21 +150,57 @@ class TakeUpQuiz extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18)),
                 color: Color(int.parse('0x'+quizInfo.color)),
-                onPressed: () {
+                onPressed: () async {
                   if(mode==1)
                     if(quizInfo.endTime.isBefore(DateTime.now())){
                       showAlertDialog(context, "Missed it!", "It's past the end time of the quiz. You can no longer take it up.");
                     }
                     else if(quizInfo.startTime.isAfter(DateTime.now())){
-                      showAlertDialog(context, "Too early!", "The alloted start time for this quiz has not yet come. Please be patient.");
+                      showAlertDialog(context, "Too early!", "The allotted start time for this quiz has not yet come. Please be patient.");
                     }
                     else{
-                      Navigator.push(
+                      return dbs.checkIfAlreadyTaken(quizInfo.id).then((value){
+                        if(!value){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => QuizMain(quizInfo: quizInfo,)),
+                          );
+                        }
+                        else{
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Row(
+                                  children: [
+                                    Icon(Icons.info_outline, color: Colors.redAccent,),
+                                    SizedBox(width: 10,),
+                                    Text("Wait a minute!"),
+                                  ],
+                                ),
+                                content: Text("You've already taken up this quiz. You cannot retake it."),
+                                actions: [
+                                  TextButton(
+                                    child: Text("OKAY"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      });
+                    }
+                  if(mode==0 && displayText.contains("View Scores"))
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => QuizMain(quizInfo: quizInfo,)),
-                      );
-                    }
+                          builder: (context) => ScoresScreen(quiz_info: quizInfo,),
+                        )
+                    );
                   if(mode==0 && displayText.contains("Edit Quiz"))
                     Navigator.push(
                         context,

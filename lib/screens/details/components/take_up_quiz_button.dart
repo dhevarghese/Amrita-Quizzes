@@ -150,7 +150,7 @@ class TakeUpQuiz extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18)),
                 color: Color(int.parse('0x'+quizInfo.color)),
-                onPressed: () {
+                onPressed: () async {
                   if(mode==1)
                     if(quizInfo.endTime.isBefore(DateTime.now())){
                       showAlertDialog(context, "Missed it!", "It's past the end time of the quiz. You can no longer take it up.");
@@ -159,11 +159,40 @@ class TakeUpQuiz extends StatelessWidget {
                       showAlertDialog(context, "Too early!", "The allotted start time for this quiz has not yet come. Please be patient.");
                     }
                     else{
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => QuizMain(quizInfo: quizInfo,)),
-                      );
+                      return dbs.checkIfAlreadyTaken(quizInfo.id).then((value){
+                        if(!value){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => QuizMain(quizInfo: quizInfo,)),
+                          );
+                        }
+                        else{
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Row(
+                                  children: [
+                                    Icon(Icons.info_outline, color: Colors.redAccent,),
+                                    SizedBox(width: 10,),
+                                    Text("Wait a minute!"),
+                                  ],
+                                ),
+                                content: Text("You've already taken up this quiz. You cannot retake it."),
+                                actions: [
+                                  TextButton(
+                                    child: Text("OKAY"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      });
                     }
                   if(mode==0 && displayText.contains("View Scores"))
                     Navigator.push(

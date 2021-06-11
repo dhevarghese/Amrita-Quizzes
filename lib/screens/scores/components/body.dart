@@ -34,6 +34,11 @@ class _BodyState extends State<Body> {
           )
       );
     }
+    String avgScore = (widget.moreScoreData["total_Score"]/widget.moreScoreData["takers_Count"]).toString();
+    if(avgScore.contains("NaN")){
+      avgScore = "0";
+    }
+    print(widget.moreScoreData["takers_Count"]);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(int.parse('0x'+widget.quizInfo.color)),
@@ -78,7 +83,7 @@ class _BodyState extends State<Body> {
                     ),
                     title: Padding(
                       padding: EdgeInsets.all(16.0),
-                      child: Text(widget.moreScoreData["NAC"].toString() + " out of " + widget.scoresData.length.toString() + " invited have taken the quiz", style: TextStyle(color: Colors.lightBlueAccent),),
+                      child: Text(widget.moreScoreData["NAC"].toString() + " out of " + widget.scoresData.length.toString() + " invited have not taken the quiz", style: TextStyle(color: Colors.lightBlueAccent),),
                     ),
                   )
               ),
@@ -94,7 +99,7 @@ class _BodyState extends State<Body> {
                     ),
                     title: Padding(
                       padding: EdgeInsets.all(16.0),
-                      child: Text("The average score is " + (widget.moreScoreData["total_Score"]/widget.moreScoreData["takers_Count"]).toString() +"\nPerformances visualised below", style: TextStyle(color: Colors.green),),
+                      child: Text("The average score is " + avgScore +"\nPerformances visualised below", style: TextStyle(color: Colors.green),),
                     ),
                   )
               ),

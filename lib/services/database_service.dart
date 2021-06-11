@@ -262,9 +262,11 @@ class DatabaseService implements Database {
     });
     int totalScore = 0;
     int takersCount = 0;
+    bool publish = false;
     await quizCollection.doc(quizId).get().then((DocumentSnapshot ds) {
       totalScore = ds.get("total_Score");
       takersCount = ds.get("takers_Count");
+      publish = ds.get("pubScore");
     }).catchError((e){});
 
     takersCount+=1;
@@ -275,7 +277,7 @@ class DatabaseService implements Database {
       'takers_Count': takersCount,
     });
 
-    List scoreDets = [marksObtained, totalMarks, numCorrectAnswers, quizName, newMap];
+    List scoreDets = [marksObtained, totalMarks, numCorrectAnswers, quizName, newMap, publish];
     await userCollection.doc(uid).update({
       'quizzes_taken.'+quizId : scoreDets
     });

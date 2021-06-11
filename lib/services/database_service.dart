@@ -22,6 +22,7 @@ abstract class Database {
   Future<void> updateQuizQuestions(String quizId, List<Question> questions);
   Future<void> uploadQuizScore(String quizId, String quizName, int marksObtained, int totalMarks, int numCorrectAnswers, LinkedHashMap answerIndex);
   Future<Map> getQuizScores(Quiz q);
+  Future<bool> checkIfAlreadyTaken(String quizId);
 }
 
 class DatabaseService implements Database {
@@ -307,5 +308,17 @@ class DatabaseService implements Database {
     });
     scoresData["NAC"] = takersNA;
     return scoresData;
+  }
+
+  Future<bool> checkIfAlreadyTaken(String quizId) async {
+    bool taken =false;
+    await userCollection.doc(uid).get().then((user) {
+      if(user.data()['quizzes_taken'] != null){
+        if(user.data()['quizzes_taken'][quizId] != null){
+          taken=true;
+        }
+      }
+    });
+    return taken;
   }
 }

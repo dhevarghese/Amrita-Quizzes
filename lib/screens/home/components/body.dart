@@ -20,7 +20,8 @@ import 'quiz_card.dart';
 
 class Body extends StatefulWidget {
   final List<Quiz> qList;
-  Body(this.qList, {Key key}) : super(key: key);
+  final VoidCallback onRefresh;
+  Body(this.qList, this.onRefresh, {Key key}) : super(key: key);
 
   _BodyState createState() => _BodyState();
 }
@@ -129,7 +130,14 @@ class _BodyState extends State<Body> {
           });*/
         },
         children: [
-          (quizzes.length==0) ? emptySearch() : quizDisplay(),
+          RefreshIndicator(
+              onRefresh: () async {
+                widget.onRefresh();
+                return;
+              },
+              child: (quizzes.length==0) ? emptySearch() : quizDisplay()
+          ),
+          //(quizzes.length==0) ? emptySearch() : quizDisplay(),
           Profile()
         ],
         physics: NeverScrollableScrollPhysics(),

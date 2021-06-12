@@ -4,7 +4,11 @@ import 'package:amrita_quizzes/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen>{
   @override
   Widget build(BuildContext context) {
     final dbs = Provider.of<Database>(context);
@@ -20,7 +24,9 @@ class HomeScreen extends StatelessWidget {
           }
           else {
             List<Quiz> data = dashBoardSnapshot.data;
-            return Body(data);
+            return Body(data, () async {
+              return setState(() {});
+            });
           }
         }
     );

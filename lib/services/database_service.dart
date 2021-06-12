@@ -1,4 +1,6 @@
 
+import 'dart:collection';
+
 import 'package:amrita_quizzes/models/Questions.dart';
 import 'package:amrita_quizzes/models/Quiz.dart';
 import 'package:amrita_quizzes/models/QuizUser.dart';
@@ -18,6 +20,9 @@ abstract class Database {
   Future<void> updateQuiz(String quizId, [Map updateData, List qTakers]);
   Future<void> deleteQuiz(Quiz q);
   Future<void> updateQuizQuestions(String quizId, List<Question> questions);
+  Future<void> uploadQuizScore(String quizId, String quizName, int marksObtained, int totalMarks, int numCorrectAnswers, LinkedHashMap answerIndex);
+  Future<Map> getQuizScores(Quiz q);
+  Future<bool> checkIfAlreadyTaken(String quizId);
 }
 
 class DatabaseService implements Database {
@@ -183,6 +188,10 @@ class DatabaseService implements Database {
         userCollection.doc(db_user.id).update({'quizzes_to_take': FieldValue.arrayUnion([autoID]),});
       }
     }
+    await quizCollection.doc(autoID).update({
+      'total_Score': 0,
+      'takers_Count': 0,
+    });
     //Reference storageRef = FirebaseStorage.instance.ref().child('quizDashImages');
     Reference storageRef = FirebaseStorage.instance.ref().child(q.id);
     UploadTask uploadTask = storageRef.putFile(q.image);
@@ -244,5 +253,74 @@ class DatabaseService implements Database {
     }
     await quizCollection.doc(q.id).delete();
     return true;
+  }
+
+  Future<void> uploadQuizScore(String quizId, String quizName, int marksObtained, int totalMarks, int numCorrectAnswers, LinkedHashMap answerIndex) async {
+    Map newMap = new Map();
+    answerIndex.forEach((key, value) {
+      newMap[key.toString()] = value;
+    });
+    int totalScore = 0;
+    int takersCount = 0;
+    bool publish = false;
+    await quizCollection.doc(quizId).get().then((DocumentSnapshot ds) {
+      totalScore = ds.get("total_Score");
+      takersCount = ds.get("takers_Count");
+      publish = ds.get("pubScore");
+    }).catchError((e){});
+
+    takersCount+=1;
+    totalScore+=marksObtained;
+
+    await quizCollection.doc(quizId).update({
+      'total_Score': totalScore,
+      'takers_Count': takersCount,
+    });
+
+    List scoreDets = [marksObtained, totalMarks, numCorrectAnswers, quizName, newMap, publish];
+    await userCollection.doc(uid).update({
+      'quizzes_taken.'+quizId : scoreDets
+    });
+    return true;
+  }
+
+  Future<Map> getQuizScores(Quiz q) async {
+    Map scoresData = new Map();
+    int takersNA = 0;
+    for(var user in q.takers){
+      var dbUsers = await userCollection.where('name', isEqualTo: user).get();
+      for(var dbUser in dbUsers.docs){
+        await userCollection.doc(dbUser.id).get().then((ds){
+          if(ds.data()['quizzes_taken'] != null){
+            scoresData[user] =  ds.data()['quizzes_taken'][q.id];
+            if(ds.data()['quizzes_taken'][q.id] == null){
+              takersNA+=1;
+            }
+          }
+          else{
+            scoresData[user] = null;
+            takersNA +=1;
+          }
+        });
+      }
+    }
+    await quizCollection.doc(q.id).get().then((ds){
+      scoresData["total_Score"] = ds["total_Score"];
+      scoresData["takers_Count"] = ds["takers_Count"];
+    });
+    scoresData["NAC"] = takersNA;
+    return scoresData;
+  }
+
+  Future<bool> checkIfAlreadyTaken(String quizId) async {
+    bool taken =false;
+    await userCollection.doc(uid).get().then((user) {
+      if(user.data()['quizzes_taken'] != null){
+        if(user.data()['quizzes_taken'][quizId] != null){
+          taken=true;
+        }
+      }
+    });
+    return taken;
   }
 }

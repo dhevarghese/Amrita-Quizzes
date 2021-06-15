@@ -285,6 +285,23 @@ class DatabaseService implements Database {
         }
       }
     }
+    if(updateData["qPubScore"] == true){
+      await quizCollection.doc(quizId).get().then((DocumentSnapshot ds) async {
+        for(var user in ds.data()["takers"]){
+          var db_users = await userCollection.where('name', isEqualTo: user).get();
+          for(var db_user in db_users.docs){
+            //print(db_user.id);
+            //print(db_user.data());
+            print(db_user.data()["tokenId"]);
+            print(db_user.data()["quizzes_taken"][quizId]);
+            sendNotification([db_user.data()["tokenId"]], "Scores for " + ds.data()["title"] + " have been published", "Scores Out");
+            // if((db_user.data()["tokenId"] != null) && (db_user.data()["quizzes_taken"][quizId] != null)){
+            //   sendNotification([db_user.data()["tokenId"]], "Scores for " + ds.data()["title"] + " have been published", "Scores Out");
+            // }
+          }
+        }
+      });
+    }
     return true;
   }
 

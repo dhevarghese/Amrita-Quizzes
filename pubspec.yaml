@@ -36,6 +36,8 @@ dependencies:
   provider: ^4.3.2+3
   random_string: ^2.1.0
   rxdart: ^0.26.0
+  onesignal_flutter: ^3.0.0
+  http: ^0.13.3
 
   form_builder_image_picker: ^1.0.0-nullsafety.0
   flutter_colorpicker: ^0.4.0
@@ -54,6 +56,7 @@ dependencies:
   flutter_svg: ^0.20.0-nullsafety.3
   get: ^3.24.0
   flutter_mailer: ^2.0.0
+  flutter_dropdown_alert: ^1.0.2
 
   esys_flutter_share: ^1.0.2
   path_provider: ^1.6.0

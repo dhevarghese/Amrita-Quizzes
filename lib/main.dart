@@ -6,6 +6,7 @@ import 'package:amrita_quizzes/services/email_secure_store.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -22,8 +23,13 @@ class MyApp extends StatelessWidget {
 
   final AuthServiceType initialAuthServiceType;
 
+  void configOneSignal(){
+    OneSignal.shared.setAppId('025dd3fa-08bd-47d1-8041-5b231f403a50'); // make it a secret later
+  }
+
   @override
   Widget build(BuildContext context) {
+    configOneSignal();
     return MultiProvider(
       providers: [
         Provider<AuthService>(

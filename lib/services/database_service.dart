@@ -1,11 +1,14 @@
 
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:amrita_quizzes/models/Questions.dart';
 import 'package:amrita_quizzes/models/Quiz.dart';
 import 'package:amrita_quizzes/models/QuizUser.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 abstract class Database {
   Future<void> updateUserData(String name, String dept, String section);
@@ -35,10 +38,25 @@ class DatabaseService implements Database {
   final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
 
   Future<void> updateUserData(String name, String dept, String section) async {
-    return await userCollection.doc(uid).update({
-      'name': name,
-      'department': dept,
-      'section':section,
+    return await userCollection.doc(uid).get().then((value) async {
+      if(value.exists){
+        await userCollection.doc(uid).update({
+          'name': name,
+          'department': dept,
+          'section':section,
+        });
+      }
+      else{
+        var status = await OneSignal.shared.getDeviceState();
+        String tokenId = status.userId;
+
+        await userCollection.doc(uid).set({
+          'name': name,
+          'department': dept,
+          'section':section,
+          'tokenId': tokenId,
+        });
+      }
     });
   }
 
@@ -186,6 +204,9 @@ class DatabaseService implements Database {
         //print(db_user.id);
         //print(db_user.data());
         userCollection.doc(db_user.id).update({'quizzes_to_take': FieldValue.arrayUnion([autoID]),});
+        if(db_user.data()["tokenId"] != Null){
+          sendNotification([db_user.data()["tokenId"]], "You have been invited into a new quiz " + q.title, "New Quiz");
+        }
       }
     }
     await quizCollection.doc(autoID).update({
@@ -205,6 +226,33 @@ class DatabaseService implements Database {
     });
     //print('File Uploaded');
 
+  }
+
+  Future<Response> sendNotification(List<String> tokenIdList, String contents, String heading) async{
+    return await post(
+      Uri.parse('https://onesignal.com/api/v1/notifications'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>
+      {
+        "app_id": "025dd3fa-08bd-47d1-8041-5b231f403a50", // App Id that one get from the OneSignal When the application is registered.
+
+        "include_player_ids": tokenIdList, //tokenIdList Is the List of All the Token Id to to Whom notification must be sent.
+
+        // android_accent_color represent the color of the heading text in the notification
+        "android_accent_color":"FF9976D2",
+
+        //"small_icon":"ic_stat_onesignal_default",
+
+        //"large_icon":"https://www.filepicker.io/api/file/zPloHSmnQsix82nlj9Aj?filename=name.jpg",
+
+        "headings": {"en": heading},
+
+        "contents": {"en": contents},
+
+      }),
+    );
   }
 
   Future<void> updateQuizQuestions(String quizId, List<Question> questions) async {

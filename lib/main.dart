@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   final AuthServiceType initialAuthServiceType;
 
   void configOneSignal(){
-    OneSignal.shared.init('025dd3fa-08bd-47d1-8041-5b231f403a50'); // make it a secret later
+    OneSignal.shared.setAppId('025dd3fa-08bd-47d1-8041-5b231f403a50'); // make it a secret later
   }
 
   @override

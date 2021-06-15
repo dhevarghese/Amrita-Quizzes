@@ -23,7 +23,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void showNotif() {
     if (((int.parse(quizDuration) -
         ((_controller.animation.value) * double.parse(quizDuration))) /
-        int.parse(quizDuration)) < 0.90) {
+        int.parse(quizDuration)) < 0.25) {
       AlertController.show("Time's almost up",
           "You have ${(int.parse(quizDuration) -
               ((_controller.animation.value) * double.parse(quizDuration)))
